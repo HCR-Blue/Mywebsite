@@ -143,7 +143,8 @@
     <div id="screen1" class="screen active">
         <h2>Aftribe Crypto Airdrop!</h2>
         <p>Total claimed: <span id="tap-count">0</span></p>
-        <img src="aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;" oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;" ondragstart="return false;">
+        <img src="aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;" oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;" ondragstart="return false;" onclick="vibrate()">
+
         <p>We're launching soon...</p>
     </div>
 
@@ -156,7 +157,7 @@
           <h2><p id=friendCount>0 Friends</p></h2>
           <div class="invite-link-box">
             <input type="text" id="invite-link-input" value="https://t.me/aftribe" readonly>
-            <button id="copy-link-btn">🔗</button>
+            <button id="copy-link-btn" style="outline: none;">🔗</button>
           </div>
         </div>
     </div>
@@ -167,12 +168,20 @@
     </div>
 
     <div class="button-container">
-        <button id="button1">Mining ⛏️</button>
-        <button id="button2">Friends 👥</button>
-        <button id="button3">Boost 🚀</button>
+        <button id="button1" style="outline: none;">Mining ⛏️</button>
+        <button id="button2" style="outline: none;">Friends 👥</button>
+        <button id="button3" style="outline: none;">Boost 🚀</button>
     </div>
 
 <script>
+
+    function vibrate() {
+        if (navigator.vibrate) {
+          // Vibrate for 100 milliseconds
+          navigator.vibrate(50);
+        }
+      }
+
     function shareTelegramBotLink() {
         const botLink = 'https://t.me/Aftribe_bot';
 
