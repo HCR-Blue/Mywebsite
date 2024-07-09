@@ -167,35 +167,41 @@
 
 <script>
     function shareTelegramBotLink() {
-    const botLink = 'https://t.me/Aftribe_bot';
+        const botLink = 'https://t.me/Aftribe_bot';
 
-    // Check if the user has a sharing option available
-    if (navigator.share) {
-      navigator.share({
-        text: 'Check out Anishs Telegram bot!',
-        url: botLink
-      })
-      .then(() => {
-        console.log('Link shared successfully!');
-      })
-      .catch((error) => {
-        console.error('Error sharing link:', error);
-      });
-    } else {
-      // Fallback to copying the link to the clipboard
-      navigator.clipboard.writeText(botLink)
-      .then(() => {
-        alert('Telegram bot link copied to clipboard!');
-      })
-      .catch((error) => {
-        console.error('Error copying link:', error);
-      });
-    }
+        // Check if the user has a sharing option available
+        if (navigator.share) {
+            navigator.share({
+                text: 'Check out AfTribeBot!',
+                url: botLink
+            })
+            .then(() => {
+                console.log('Link shared successfully!');
+            })
+            .catch((error) => {
+                console.error('Error sharing link:', error);
+                // Fallback to copying the link to the clipboard
+                navigator.clipboard.writeText(botLink)
+                .then(() => {
+                    alert('Telegram bot link copied to clipboard!');
+                })
+                .catch((error) => {
+                    console.error('Error copying link:', error);
+                });
+            });
+        } else {
+            // Fallback to copying the link to the clipboard
+            navigator.clipboard.writeText(botLink)
+            .then(() => {
+                alert('Telegram bot link copied to clipboard!');
+            })
+            .catch((error) => {
+                console.error('Error copying link:', error);
+            });
+        }
     }
 
     document.getElementById('copy-link-btn').addEventListener('click', shareTelegramBotLink);
-
-
 
 
     // document.getElementById('open-app-btn').addEventListener('click', () => {
