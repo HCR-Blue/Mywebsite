@@ -29,23 +29,27 @@
             background-position: 0% 50%;
           }
         }
-        .aflogo {
-          display: block;
-          max-width: 260px;
-          cursor: pointer;
-          align-items: center;
-          transition: transform 0.2s ease-in-out;
-          background-color: transparent;
-          margin: 0 auto;
-          border: none;
-          padding: 0;
-        }
+      .aflogo {
+        display: block;
+        max-width: 260px;
+        cursor: pointer;
+        align-items: center;
+        transition: transform 0.2s ease-in-out;
+        background-color: transparent;
+        margin: 0 auto;
+        border: none;
+        padding: 0;
+        user-select: none; /* Make the image not selectable */
+        -webkit-user-drag: none; /* Make the image not draggable */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
 
-
-        .aflogo:active {
-            transform: scale(0.95);
-            object-fit: contain;
-        }
+      .aflogo:active {
+        transform: scale(0.95);
+        object-fit: contain;
+      }
 
         #tap-count {
             font-size: 25px;
