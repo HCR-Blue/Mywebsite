@@ -13,9 +13,9 @@
             min-height: 80vh;
             margin: 0;
             font-family: OCR-A BT, sans-serif;
-            background: linear-gradient(45deg, #ff6b6b, #ffa500, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
-            background-size: 400% 400%;
-            animation: colorChange 15s ease infinite;
+            background: linear-gradient(45deg, #00ff00, #ff00ff, #0000ff, #ff00ff);
+            background-size: 100% 400%;
+            animation: colorChange 10s ease infinite;
         }
 
         @keyframes colorChange {
@@ -31,20 +31,22 @@
         }
         .aflogo {
           display: block;
-          max-width: 400px;
+          max-width: 260px;
           cursor: pointer;
           align-items: center;
           transition: transform 0.2s ease-in-out;
+          background-color: transparent;
           margin: 0 auto;
         }
 
 
         .aflogo:active {
             transform: scale(0.95);
+            object-fit: contain;
         }
 
         #tap-count {
-            font-size: 24px;
+            font-size: 25px;
             font-weight: bold;
         }
 
@@ -82,7 +84,7 @@
 
         .button-container {
             position: fixed;
-            bottom: 50px;
+            bottom: 130px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -130,26 +132,26 @@
         <h2>Aftribe Crypto Airdrop!</h2>
         <p>Total claimed: <span id="tap-count">0</span></p>
         <img src="aflogo.png" alt="AF Logo" class="aflogo">
-        <p style="color: blue;">Tap to earn tokens:</p>
+        <p>We're launching soon...</p>
     </div>
 
     <div id="screen2" class="screen">
         <h1>List of your friends</h1>
-        <button id="screen2-text">invite friend</button>
+        <button id="screen2-text">invite friends</button>
         <!-- <p id="screen2-text">This is the second screen.</p> -->
 
         <div class="invite-link-container">
           <h2><p id=friendCount>0 Friends</p></h2>
           <div class="invite-link-box">
-            <input type="text" id="invite-link-input" value="https://facebook.com/invite" readonly>
+            <input type="text" id="invite-link-input" value="https://t.me/aftribe" readonly>
             <button id="copy-link-btn">🔗</button>
           </div>
         </div>
     </div>
 
     <div id="screen3" class="screen">
-        <h1>Screen 3</h1>
-        <p id="screen3-text">This is the third screen.</p>
+        <h1>Increase you coins</h1>
+        <p id="screen3-text">Coming soon.</p>
     </div>
 
     <div class="button-container">
