@@ -29,28 +29,27 @@
             background-position: 0% 50%;
           }
         }
-      .aflogo {
-        display: block;
-        max-width: 260px;
-        cursor: pointer;
-        align-items: center;
-        transition: transform 0.2s ease-in-out;
-        background-color: transparent;
-        margin: 0 auto;
-        border: none;
-        padding: 0;
-        user-select: none; /* Make the image not selectable */
-        -webkit-user-drag: none; /* Make the image not draggable */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      }
+        .aflogo {
+            display: block;
+            margin: 0 auto;
+            width: 200px;
+            height: auto;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events: auto;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-      .aflogo:active {
-        transform: scale(0.95);
-        object-fit: contain;
-      }
+        .aflogo:active {
+            transform: scale(0.95);
+            object-fit: contain;
+        }
 
+        .aflogo:focus {
+            outline: none;
+        }
         #tap-count {
             font-size: 25px;
             font-weight: bold;
@@ -167,6 +166,38 @@
     </div>
 
 <script>
+    function shareTelegramBotLink() {
+    const botLink = 'https://t.me/Aftribe_bot';
+
+    // Check if the user has a sharing option available
+    if (navigator.share) {
+      navigator.share({
+        text: 'Check out Anishs Telegram bot!',
+        url: botLink
+      })
+      .then(() => {
+        console.log('Link shared successfully!');
+      })
+      .catch((error) => {
+        console.error('Error sharing link:', error);
+      });
+    } else {
+      // Fallback to copying the link to the clipboard
+      navigator.clipboard.writeText(botLink)
+      .then(() => {
+        alert('Telegram bot link copied to clipboard!');
+      })
+      .catch((error) => {
+        console.error('Error copying link:', error);
+      });
+    }
+    }
+
+    document.getElementById('copy-link-btn').addEventListener('click', shareTelegramBotLink);
+
+
+
+
     // document.getElementById('open-app-btn').addEventListener('click', () => {
     //     // Code to communicate with Telegram bot and open the "Web App"
     // });
@@ -210,7 +241,6 @@
       document.getElementById('screen2-text').addEventListener('click', JoinUs);
     // Get the input field and the copy button
     const inviteLinkInput = document.getElementById('invite-link-input');
-    const copyLinkBtn = document.getElementById('copy-link-btn');
 
     // Add a click event listener to the copy button
     copyLinkBtn.addEventListener('click', () => {
