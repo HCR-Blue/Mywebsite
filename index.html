@@ -95,7 +95,7 @@
 
             .button-container {
                 position: fixed;
-                bottom: 130px;
+                bottom: 4%;
                 left: 50%;
                 transform: translateX(-50%);
                 display: flex;
@@ -151,8 +151,8 @@
 
             .tasks {
                 position: absolute;
-                top: 60%;
-                left: 10%;
+                bottom: 20%;
+                left: 5%;
                 display: flex;
                 flex-direction: column;
             }
@@ -190,7 +190,7 @@
                 font-size: 30px;
                 padding: 10px;
                 color: #ff4800;
-                background: #ffc4006d;
+                /* background: #ffc4006d; */
             }
 
             .frind-list {
@@ -242,7 +242,7 @@
         <!-- <button id="open-app-btn">Open App</button> -->
         <div id="screen1" class="screen active">
             <h2 style="color: rgb(255, 255, 255); font-size:37px; font-weight: bold;" id="tap-count">0.000</h2>
-            <h2 id="ligues" style="color: rgb(255, 199, 45)"> <code> < </code> Gold <code>></code> </h2>
+            <h2 id="ligues" style="color: rgb(255, 199, 45)"> <code> <</code> Gold <code>></code> </h2>
             <img src="aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;"
                 oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;"
                 ondragstart="return false;" onclick="vibrate()">
@@ -438,12 +438,14 @@
             {
                 showScreen('screen1');
                 tasks.style.display = 'flex';
+                wallet.style.display = 'flex';
             });
 
             button2.addEventListener('click', () =>
             {
                 showScreen('screen2');
                 tasks.style.display = 'none';
+                wallet.style.display = 'none';
                 document.getElementById('screen2-text').textContent = 'Join our channel';
             });
 
@@ -451,6 +453,7 @@
             {
                 showScreen('screen3');
                 tasks.style.display = 'none';
+                wallet.style.display = 'none';
                 document.getElementById('screen3-text').textContent = 'x2';
             });
 
@@ -458,6 +461,7 @@
             {
                 showScreen('ligues-screen')
                 tasks.style.display = 'none';
+                wallet.style.display = 'none';
                 let COINS = '160px';
                 ligue_range_count.style.width = COINS;
             })
@@ -465,6 +469,7 @@
             {
                 showScreen('tasks-screen');
                 tasks.style.display = 'none';
+                wallet.style.display = 'none';
             })
             wallet.addEventListener('click', () =>
             {
