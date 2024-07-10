@@ -1,282 +1,508 @@
+
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Afghanistan Airdrop</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 80vh;
-            margin: 0;
-            font-family: OCR-A BT, sans-serif;
-            background: linear-gradient(45deg, #00ff00, #ff00ff, #0000ff, #ff00ff);
-            background-size: 100% 400%;
-/*            animation: colorChange 10s ease infinite;*/
-        }
 
-        @keyframes colorChange {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-        .aflogo {
-            display: block;
-            margin: 0 auto;
-            width: 270px;
-            height: auto;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            pointer-events: auto;
-            -webkit-tap-highlight-color: transparent;
-        }
+    <head>
+        <title>Afghanistan Airdrop</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                min-height: 80vh;
+                margin: 0;
+                font-family: OCR-A BT, sans-serif;
+                background: linear-gradient(45deg, #00ff00, #ff00ff, #0000ff, #ff00ff);
+                background-size: 100% 400%;
+                /*            animation: colorChange 10s ease infinite;*/
+            }
 
-        .aflogo:active {
-            transform: scale(0.95);
-            object-fit: contain;
-        }
+            @keyframes colorChange {
+                0% {
+                    background-position: 0% 50%;
+                }
 
-        .aflogo:focus {
-            outline: none;
-        }
-        #tap-count {
-            font-size: 25px;
-            font-weight: bold;
-        }
+                50% {
+                    background-position: 100% 50%;
+                }
 
-        button {
-            font-family: Exotc350 Bd BT;
-            margin: 0 10px;
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #CCA300;
-            color: #663500;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-        }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
 
-        button:hover {
-            background-color: #A94900;
-        }
+            .aflogo {
+                display: block;
+                margin: 0 auto;
+                width: 270px;
+                height: auto;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                pointer-events: auto;
+                -webkit-tap-highlight-color: transparent;
+            }
 
-        .screen {
-          position: absolute;
-          top: 5%;
-          left: 50%;
-          transform: translate(-50%, 0);
-          text-align: center;
-          padding: 20px;
-          width: 80%;
-          max-width: 600px;
-          display: none;
-        }
+            .aflogo:active {
+                transform: scale(0.95);
+                object-fit: contain;
+            }
 
-        .screen.active {
-          display: block;
-        }
+            .aflogo:focus {
+                outline: none;
+            }
 
-        .button-container {
-            position: fixed;
-            bottom: 130px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-        }
+            #tap-count {
+                font-size: 25px;
+                font-weight: bold;
+            }
+
+            button {
+                font-family: Exotc350 Bd BT;
+                margin: 0 10px;
+                padding: 10px 20px;
+                font-size: 18px;
+                background-color: #ecb500;
+                color: #fff;
+                /* border: none; */
+                border: 0.9px solid rgb(218, 218, 218);
+                border-radius: 20px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #fd7b17;
+            }
+
+            .screen {
+                position: absolute;
+                top: 5%;
+                left: 50%;
+                transform: translate(-50%, 0);
+                text-align: center;
+                padding: 20px;
+                width: 80%;
+                max-width: 600px;
+                display: none;
+            }
+
+            .screen.active {
+                display: block;
+            }
+
+            .button-container {
+                position: fixed;
+                bottom: 130px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+            }
 
 
-/*Screen 2*/
+            /*Screen 2*/
 
-    .invite-link-container {
-      margin-top: 30px;
-      text-align: center;
-    }
-    .invite-link-container:focus {
-        outline: none;
-    }
+            .invite-link-container {
+                margin-top: 30px;
+                text-align: center;
+            }
 
-    .invite-link-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 10px;
-    }
-    .invite-link-box:focus {
-        outline: none;
-    }
-    #invite-link-input {
-      padding: 8px 12px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 250px;
-      margin-right: 10px;
-    }
+            .invite-link-container:focus {
+                outline: none;
+            }
 
-    #copy-link-btn {
-      padding: 8px 16px;
-      font-size: 16px;
-      background-color: #500000;
-      color: #D8B625;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #copy-link-btn:focus {
-        outline: none;
-    }
-    </style>
-</head>
-<body>
-    <!-- <button id="open-app-btn">Open App</button> -->
-    <div id="screen1" class="screen active">
-        <h2>Aftribe Crypto Airdrop!</h2>
-        <p>Total claimed: <span id="tap-count">0</span></p>
-        <img src="aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;" oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;" ondragstart="return false;" onclick="vibrate()">
+            .invite-link-box {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 10px;
+                margin-bottom: 15px;
 
-        <p>We're launching soon...</p>
-    </div>
+            }
 
-    <div id="screen2" class="screen">
-        <h1>List of your friends</h1>
-        <button id="screen2-text">Join us</button>
-        <!-- <p id="screen2-text">This is the second screen.</p> -->
+            .invite-link-box:focus {
+                outline: none;
+            }
 
-        <div class="invite-link-container">
-          <h2><p id=friendCount>0 Friends</p></h2>
-          <div class="invite-link-box">
-            <input type="text" id="invite-link-input" value="https://t.me/aftribe" readonly>
-            <button id="copy-link-btn" style="outline: none;">🔗</button>
-          </div>
+            #invite-link-input {
+                padding: 8px 12px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                width: 250px;
+                margin-right: 10px;
+            }
+
+            #copy-link-btn {
+                padding: 8px 16px;
+                font-size: 16px;
+                background-color: #500000;
+                color: #D8B625;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            #copy-link-btn:focus {
+                outline: none;
+            }
+
+            .tasks {
+                position: absolute;
+                top: 60%;
+                left: 10%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .tasks .prize {
+                /* border: 4px dotted #ffff00;
+                background: #ff000090;
+                padding: 4px; */
+                font-size: 80px;
+            }
+
+            .ligue-range {
+                display: flex;
+                justify-content: center;
+
+            }
+
+            .task-list {
+                display: flex;
+                justify-content: space-between;
+                border: 1px solid #fff;
+                border-radius: 10px;
+                background: #0000006a;
+                color: #ffcc00;
+                align-items: baseline;
+                margin-top: 5px;
+            }
+
+            #is_task_done {
+                font-size: 30px;
+                padding: 10px;
+            }
+
+            #task_go {
+                font-size: 30px;
+                padding: 10px;
+                color: #ff4800;
+                background: #ffc4006d;
+            }
+
+            .frind-list {
+                display: flex;
+                justify-content: space-between;
+                /* border: 1px solid #fff; */
+                /* border-radius: 10px; */
+                background: #0000006a;
+                color: #ffcc00;
+                align-items: baseline;
+                margin-top: 5px;
+            }
+
+            #is_frind_done {
+                font-size: 30px;
+                padding: 10px;
+            }
+
+            #frind_go {
+                font-size: 30px;
+                padding: 10px;
+                color: #fff;
+                /* background: #ffc4006d; */
+            }
+
+            .wallet {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                position: absolute;
+                top: 1%;
+                left: 5%;
+            }
+
+            .wallet-icon {
+                font-size: 50px;
+                background: #ffffff1a;
+                text-align: center;
+            }
+
+            .wallet-icon:hover {
+                background-color: #ffffff82;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- <button id="open-app-btn">Open App</button> -->
+        <div id="screen1" class="screen active">
+            <h2 style="color: rgb(255, 255, 255); font-size:37px; font-weight: bold;" id="tap-count">0.000</h2>
+            <h2 id="ligues" style="color: rgb(255, 199, 45)"> <code> < </code> Gold <code>></code> </h2>
+            <img src="aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;"
+                oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;"
+                ondragstart="return false;" onclick="vibrate()">
+
+            <!-- <p style="color:#fff">COMMING SOON...</p> -->
         </div>
-    </div>
 
-    <div id="screen3" class="screen">
-        <h1>Increase you coins</h1>
-        <p id="screen3-text">Coming soon.</p>
-    </div>
+        <div id="screen2" class="screen">
+            <h1 style="color:#fff">List of your friends</h1>
+            <button id="screen2-text">Join us</button>
+            <!-- <p id="screen2-text">This is the second screen.</p> -->
 
-    <div class="button-container">
-        <button id="button1" style="outline: none;">Mining ⛏️</button>
-        <button id="button2" style="outline: none;">Friends 👥</button>
-        <button id="button3" style="outline: none;">Boost 🚀</button>
-    </div>
+            <div class="invite-link-container">
+                <h2>
+                    <p style="color:#fff" id=friendCount>0 Friends</p>
+                </h2>
+                <div class="invite-link-box">
+                    <input type="text" id="invite-link-input" value="https://t.me/aftribe" readonly>
+                    <button id="copy-link-btn" style="outline: none;">🔗</button>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction:column;">
+                <div class="frind-list">
+                    <span id="is_frind_done">👤</span>
+                    <p>RashidBik</p>
+                    <span id="frind_go">700</span>
+                </div>
+                <div class="frind-list">
+                    <span id="is_frind_done">👤</span>
+                    <p>Ghafor</p>
+                    <span id="frind_go">25000</span>
+                </div>
+            </div>
+        </div>
 
-<script>
+        <div style="color:#fff" id="screen3" class="screen">
+            <h1>Increase Mining</h1>
+            <p id="screen3-text" style="color:#ffa600; font-size:30px; font-weight:bold;">x2</p>
+            <p>Multiple your mining rate</p>
+            <img src="" alt="">
+            <small>0.002BNB</small>
 
-    function vibrate() {
-        if (navigator.vibrate) {
-          // Vibrate for 100 milliseconds
-          navigator.vibrate(5);
-        }
-      }
+            <address>idfknsdafjkddfj-980999</address>
+            <div style="font-size:200px;">
+                🧭
+            </div>
+        </div>
 
-    function shareTelegramBotLink() {
-        const botLink = 'https://t.me/Aftribe_bot';
+        <div class="button-container">
+            <button id="button2" style="outline: none;">Friends 👥</button>
+            <button id="button1" style="outline: none;">Mining ⛏️</button>
+            <button id="button3" style="outline: none;">Boost 🚀</button>
+        </div>
 
-        // Check if the user has a sharing option available
-        if (navigator.share) {
-            navigator.share({
-                text: 'Check out AfTribeBot!',
-                url: botLink
-            })
-            .then(() => {
-                console.log('Link shared successfully!');
-            })
-            .catch((error) => {
-                console.error('Error sharing link:', error);
-                // Fallback to copying the link to the clipboard
-                navigator.clipboard.writeText(botLink)
-                .then(() => {
-                    alert('Telegram bot link copied to clipboard!');
-                })
-                .catch((error) => {
-                    console.error('Error copying link:', error);
-                });
+        <div id="ligues-screen" class="screen">
+            <p style="font-size:40px; font-weight:bold; color: #fff;">Gold League</p>
+            <p style="font-size: 18px; color:#ffd61e; font-weight:bold;  ">You owned this cup</p>
+            <p style="height: 200px; font-size:144px; margin: 5px; color:rgb(255, 208, 0); font-weight:bold;">💫</p>
+            <div style="display: flex; flex-direction: column;">
+                <div class="ligue-range">
+                    <!-- <p>😑</p> -->
+                    <div style="height: 20px; width:200px; font-size:50px; background-color:pink;
+                    border-radius: 10px;
+                    ">
+                        <div id="ligue-range-count"
+                            style=" border-radius: 10px 0 0 10px; background-color:red; height:19px; width:1px;">
+                        </div>
+                    </div>
+                    <!-- <p>🍷</p> -->
+                </div>
+                <p style="font-size:20px; color: #fff; font-weight:bold;">433/ <span style="color:green;">500</span></p>
+            </div>
+        </div>
+        <div id="tasks-screen" class="screen">
+            <div>
+                <p style="font-size:40px; font-weight:bold; color: #fff;">Special tasks</p>
+                <p style="font-size: 18px; color:#ffd61e; font-weight:bold;  ">You can earn rewards for each task</p>
+            </div>
+            <div class="task-list">
+                <span id="is_task_done">50 🎊</span>
+                <p>subscribe to our youtube channel</p>
+                <span id="task_go">Go</span>
+            </div>
+            <div class="task-list">
+                <span id="is_task_done">70 🎊</span>
+                <p>join our conversation</p>
+                <span id="task_go">✅</span>
+            </div>
+
+
+        </div>
+        <div id="wallet-screen" class="screen">
+            <h2 style="color: #fff;">COMMING SOON...</h2>
+        </div>
+
+        <div id="tasks" class="tasks">
+            <span class="prize">🎁</span>
+        </div>
+        <div id="wallet" class="wallet">
+            <span class="wallet-icon">💼</span>
+            <p class="wallet_text"
+                style="text-align:center; font-size:10px;  background-color: #ffffff71;  margin: 0px; padding: 0px 2px 0 2px;">
+                Connect
+                Wallet</p>
+        </div>
+
+        <script>
+
+
+            function vibrate()
+            {
+                if (navigator.vibrate)
+                {
+                    // Vibrate for 100 milliseconds
+                    navigator.vibrate(1);
+                }
+            }
+
+            function shareTelegramBotLink()
+            {
+                const botLink = 'https://t.me/Aftribe_bot';
+
+                // Check if the user has a sharing option available
+                if (navigator.share)
+                {
+                    navigator.share({
+                        text: 'Check out AfTribeBot!',
+                        url: botLink
+                    })
+                        .then(() =>
+                        {
+                            console.log('Link shared successfully!');
+                        })
+                        .catch((error) =>
+                        {
+                            console.error('Error sharing link:', error);
+                            // Fallback to copying the link to the clipboard
+                            navigator.clipboard.writeText(botLink)
+                                .then(() =>
+                                {
+                                    alert('Telegram bot link copied to clipboard!');
+                                })
+                                .catch((error) =>
+                                {
+                                    console.error('Error copying link:', error);
+                                });
+                        });
+                } else
+                {
+                    // Fallback to copying the link to the clipboard
+                    navigator.clipboard.writeText(botLink)
+                        .then(() =>
+                        {
+                            alert('Telegram bot link copied to clipboard!');
+                        })
+                        .catch((error) =>
+                        {
+                            console.error('Error copying link:', error);
+                        });
+                }
+            }
+
+            document.getElementById('copy-link-btn').addEventListener('click', shareTelegramBotLink);
+
+
+            // document.getElementById('open-app-btn').addEventListener('click', () => {
+            //     // Code to communicate with Telegram bot and open the "Web App"
+            // });
+            // let tapCount = 0;
+            const tapCountDisplay = document.getElementById('tap-count');
+
+            let tapCount = 0.000;
+            document.querySelector('.aflogo').addEventListener('click', () =>
+            {
+                // Simulate updating the tap count
+                // let tapCount = parseInt(tapCountDisplay.textContent);
+                // tapCountDisplay.textContent = (++tapCount).toString();
+                let zeropoint = parseFloat(0.001);
+                let result = tapCount += zeropoint;
+
+                tapCountDisplay.textContent = result.toFixed(3);
             });
-        } else {
-            // Fallback to copying the link to the clipboard
-            navigator.clipboard.writeText(botLink)
-            .then(() => {
-                alert('Telegram bot link copied to clipboard!');
-            })
-            .catch((error) => {
-                console.error('Error copying link:', error);
+
+            const button1 = document.getElementById('button1');
+            const button2 = document.getElementById('button2');
+            const button3 = document.getElementById('button3');
+            const ligues = document.getElementById('ligues');
+            const ligue_range_count = document.getElementById('ligue-range-count')
+            const tasks = document.getElementById('tasks');
+            const wallet = document.getElementById('wallet');
+
+            button1.addEventListener('click', () =>
+            {
+                showScreen('screen1');
+                tasks.style.display = 'flex';
             });
-        }
-    }
 
-    document.getElementById('copy-link-btn').addEventListener('click', shareTelegramBotLink);
+            button2.addEventListener('click', () =>
+            {
+                showScreen('screen2');
+                tasks.style.display = 'none';
+                document.getElementById('screen2-text').textContent = 'Join our channel';
+            });
 
+            button3.addEventListener('click', () =>
+            {
+                showScreen('screen3');
+                tasks.style.display = 'none';
+                document.getElementById('screen3-text').textContent = 'x2';
+            });
 
-    // document.getElementById('open-app-btn').addEventListener('click', () => {
-    //     // Code to communicate with Telegram bot and open the "Web App"
-    // });
-    // let tapCount = 0;
-    const tapCountDisplay = document.getElementById('tap-count');
+            ligues.addEventListener('click', () =>
+            {
+                showScreen('ligues-screen')
+                tasks.style.display = 'none';
+                let COINS = '160px';
+                ligue_range_count.style.width = COINS;
+            })
+            tasks.addEventListener('click', () =>
+            {
+                showScreen('tasks-screen');
+                tasks.style.display = 'none';
+            })
+            wallet.addEventListener('click', () =>
+            {
+                showScreen('wallet-screen');
+                tasks.style.display = 'none';
+            })
+            function showScreen(screenId)
+            {
+                const screens = document.querySelectorAll('.screen');
+                screens.forEach(screen => screen.classList.remove('active'));
+                document.getElementById(screenId).classList.add('active');
+            }
 
-    document.querySelector('.aflogo').addEventListener('click', () => {
-        // Simulate updating the tap count
-        let tapCount = parseInt(tapCountDisplay.textContent);
-        tapCountDisplay.textContent = (++tapCount).toString();
-    });
+            function JoinUs(screenId)
+            {
+                window.open('https://t.me/aftribe', '_blank');
+            }
 
-    const button1 = document.getElementById('button1');
-    const button2 = document.getElementById('button2');
-    const button3 = document.getElementById('button3');
+            document.getElementById('screen2-text').addEventListener('click', JoinUs);
+            // Get the input field and the copy button
+            const inviteLinkInput = document.getElementById('invite-link-input');
 
-    button1.addEventListener('click', () => {
-        showScreen('screen1');
-    });
+            // Add a click event listener to the copy button
+            copyLinkBtn.addEventListener('click', () =>
+            {
+                // Select the text in the input field
+                inviteLinkInput.select();
+                inviteLinkInput.setSelectionRange(0, 99999); // For mobile devices
 
-    button2.addEventListener('click', () => {
-        showScreen('screen2');
-        document.getElementById('screen2-text').textContent = 'Join our channel';
-    });
+                // Copy the selected text to the clipboard
+                navigator.clipboard.writeText(inviteLinkInput.value);
 
-    button3.addEventListener('click', () => {
-        showScreen('screen3');
-        document.getElementById('screen3-text').textContent = 'COMING SOON...';
-    });
+                // Show a success message or perform any other desired action
+                alert('Invite link copied to clipboard!');
+            });
 
-    function showScreen(screenId) {
-        const screens = document.querySelectorAll('.screen');
-        screens.forEach(screen => screen.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
-    }
+        </script>
+    </body>
 
-    function JoinUs(screenId) {
-        window.open('https://t.me/aftribe', '_blank');
-    }
-
-      document.getElementById('screen2-text').addEventListener('click', JoinUs);
-    // Get the input field and the copy button
-    const inviteLinkInput = document.getElementById('invite-link-input');
-
-    // Add a click event listener to the copy button
-    copyLinkBtn.addEventListener('click', () => {
-      // Select the text in the input field
-      inviteLinkInput.select();
-      inviteLinkInput.setSelectionRange(0, 99999); // For mobile devices
-
-      // Copy the selected text to the clipboard
-      navigator.clipboard.writeText(inviteLinkInput.value);
-
-      // Show a success message or perform any other desired action
-      alert('Invite link copied to clipboard!');
-    });
-
-</script>
-</body>
 </html>
