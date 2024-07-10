@@ -510,3 +510,69 @@
     </body>
 
 </html>
+
+
+<!-- here you go -->
+        .tap-animation {
+          position: absolute;
+          font-size: 25px;
+          font-weight: bold;
+          color: #ffffff;
+          opacity: 0;
+          transform: scale(2);
+          animation: tapAnimation 0.5s ease-out;
+          text-shadow: 0 0 10px rgba(10, 255, 255, 0.8), 0 0 20px rgba(20, 255, 25, 0.6), 0 0 30px rgba(25, 255, 25, 0.4), 0 0 40px rgba(10, 255, 20, 0.2);
+        }
+
+        @keyframes tapAnimation {
+          0% {
+            opacity: 1;
+            transform: scale(2);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.5);
+          }
+          100% {
+            opacity: 0;
+            transform: scale(1);
+          }
+        }
+
+        #tap-count.animate {
+          animation: count-up 1s ease;
+        }
+        @keyframes tap-animation {
+          0% {
+              transform: scale(1);
+          }
+          50% {
+              transform: scale(0.8);
+          }
+          100% {
+              transform: scale(1);
+          }
+        }
+
+        .tap-cursor:active {
+          animation: tap-animation 0.2s ease-in-out;
+    aflogo.addEventListener('click', () => {
+        taps++;
+        tapCount.textContent = taps;
+        tapCount.classList.add('animate');
+        setTimeout(() => {
+            tapCount.classList.remove('animate');
+        }, 500);
+
+        const tapAnimation = document.createElement('div');
+        tapAnimation.classList.add('tap-animation');
+        tapAnimation.textContent = '+0.0001';
+        tapAnimation.style.left = event.clientX + 'px';
+        tapAnimation.style.top = event.clientY + 'px';
+        document.body.appendChild(tapAnimation);
+        setTimeout(() => {
+            tapAnimation.remove();
+        }, 500);
+
+        sendTapCountToServer(taps);
+    });
