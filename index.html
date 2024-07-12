@@ -306,16 +306,25 @@
             }
 
 
-
-
-            #wallet-link-input {
-                padding: 8px 12px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                width: 250px;
-                margin-right: 10px;
+/*            button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 10px 20px;
+              font-size: 16px;
+              border-radius: 5px;
+              border: none;
+              cursor: pointer;
+              outline: none;
+              background-color: #985;
+              color: #fff;
             }
+
+            button img {
+              width: 16px;
+              height: 16px;
+              margin-right: 8px;
+            }*/
         </style>
     </head>
 
@@ -325,7 +334,7 @@
         <div id="screen1" class="screen active">
             <h2 style="color: rgb(255, 255, 255); font-size:37px; font-weight: bold;" id="tap-count">0.000</h2>
             <h2 id="ligues" style="color: rgb(255, 199, 45)"> <code> <</code> Gold <code>></code> </h2>
-            <img src="aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;"
+            <img src="resources/aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;"
                 oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;"
                 ondragstart="return false;" onclick="vibrate()" onclick="handleClaimSubmission()">
 
@@ -363,7 +372,7 @@
         <div style="color:#fff" id="screen3" class="screen">
             <h1>Increase Mining</h1>
             <p id="screen3-text" style="color:#ffa600; font-size:30px; font-weight:bold;">x2</p>
-            <p>increase your mining rate</p>
+            <p>Multiple your mining rate</p>
             <img src="" alt="">
             <small>0.002BNB</small>
 
@@ -417,14 +426,14 @@
 
         </div>
         <div id="wallet-screen" class="screen">
-            <h2 style="color: #fff;">Wallet</h2>
-            <h3 style="color: #fff;">Connect your TON wallet for future rewards</h3>
-            <h3 style="color: #985; font-weight: bold; text-align: left;">TON wallet</h3>
-            <button id="conn-wallet-btn" style="outline: none;">❌</button>
-            <input type="text" id="wallet-link-input" value="" readonly>
-            <button id="copy-wallet-btn" style="outline: none;">🔗</button>
-            <!-- <h2 style="color: #fff;">COMING SOON...</h2> -->
+            <h2>Connect to your TON wallet</h2>
+            <button id="conn-wallet-btn">
+              <img src="resources/ton_symbol.svg" alt="Wallet Icon" style="width: 25px; height: 25px;">
+              CONNECT
+            </button>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@tonclient/lib-web/dist/ton-client-wasm.js"></script>
 
         <div id="tasks" class="tasks">
             <span class="prize">🎁</span>
@@ -438,74 +447,31 @@
         </div>
 
         <script>
-            // wallet-connection.js
+            // Initialize the TON SDK
+            (async () => {
+              await window.TONClient.setup({
+                network: {
+                  endpoints: ['https://toncenter.com/api/v2/jsonRPC'],
+                },
+              });
+            })();
 
-            // Define the available wallet options
-            const walletOptions = [
-              { name: 'TON Wallet', icon: 'ton_symbol.svg' },
-            ];
-
-            // Get the necessary DOM elements
-            const walletLinkInput = document.getElementById('wallet-link-input');
             const connWalletBtn = document.getElementById('conn-wallet-btn');
-            const copyWalletBtn = document.getElementById('copy-wallet-btn');
-            const walletOptionsContainer = document.createElement('div');
-            walletOptionsContainer.classList.add('wallet-options-container');
 
-            // Populate the wallet options
-            walletOptions.forEach(wallet => {
-              const walletOption = document.createElement('div');
-              walletOption.classList.add('wallet-option');
-              walletOption.innerHTML = `
-                <img src="${wallet.icon}" alt="${wallet.name} logo" style="width: 24px; height: 24px;">
-                <span>${wallet.name}</span>
-              `;
-              walletOption.addEventListener('click', () => connectToWallet(wallet.name));
-              walletOptionsContainer.appendChild(walletOption);
-            });
-
-            // Connect to the selected wallet
-            async function connectToWallet(walletName) {
+            // Handle wallet connection
+            connWalletBtn.addEventListener('click', async () => {
               try {
-                let provider;
-                switch (walletName) {
-                  case 'TON Wallet':
-                    provider = await window.ton.requestAccounts();
-                    break;
-                  default:
-                    throw new Error(`Unsupported wallet: ${walletName}`);
-                }
+                // Request wallet accounts
+                const { accounts } = await window.TONClient.requestAccounts();
 
-                // Update the wallet link input with the connected wallet address
-                walletLinkInput.value = provider.accounts[0];
-
-                // Hide the wallet options and display the connected wallet address
-                walletOptionsContainer.style.display = 'none';
-                connWalletBtn.style.display = 'none';
-                copyWalletBtn.style.display = 'inline-block';
+                // Display the connected wallet address
+                alert(`Connected wallet address: ${accounts[0]}`);
               } catch (error) {
                 console.error('Error connecting to wallet:', error);
-                alert(`Error connecting to ${walletName} wallet: ${error.message}`);
+                alert(`Error connecting to wallet: ${error.message}`);
               }
-            }
-
-            // Attach the wallet options to the DOM
-            const walletScreen = document.getElementById('wallet-screen');
-            walletScreen.appendChild(walletOptionsContainer);
-
-            // Handle wallet connection button click
-            connWalletBtn.addEventListener('click', () => {
-              walletOptionsContainer.style.display = 'flex';
-              connWalletBtn.style.display = 'none';
-              copyWalletBtn.style.display = 'none';
             });
-
-            // Handle wallet address copy button click
-            copyWalletBtn.addEventListener('click', () => {
-              navigator.clipboard.writeText(walletLinkInput.value);
-              alert('Wallet address copied to clipboard!');
-            });
-
+            // Connect to ton wallet =======================
 
 
             function vibrate()
