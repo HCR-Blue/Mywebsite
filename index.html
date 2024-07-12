@@ -13,7 +13,7 @@
                 justify-content: flex-start;
                 min-height: 80vh;
                 margin: 0;
-                font-family: OCR-A BT, sans-serif;
+                font-family: Arial, sans-serif;
                 background: linear-gradient(45deg, #00ff00, #ff00ff, #0000ff, #ff00ff);
                 background-size: 100% 400%;
                 /*            animation: colorChange 10s ease infinite;*/
@@ -75,7 +75,7 @@
             }
 
             button {
-                font-family: Exotc350 Bd BT;
+                font-family: Arial;
                 margin: 0 10px;
                 padding: 10px 20px;
                 font-size: 18px;
@@ -304,6 +304,18 @@
             .tap-cursor:active {
                 animation: tap-animation 0.2s ease -in -out;
             }
+
+
+
+
+            #wallet-link-input {
+                padding: 8px 12px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                width: 250px;
+                margin-right: 10px;
+            }
         </style>
     </head>
 
@@ -315,7 +327,7 @@
             <h2 id="ligues" style="color: rgb(255, 199, 45)"> <code> <</code> Gold <code>></code> </h2>
             <img src="aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;"
                 oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;"
-                ondragstart="return false;" onclick="vibrate()">
+                ondragstart="return false;" onclick="vibrate()" onclick="handleClaimSubmission()">
 
             <!-- <p style="color:#fff">COMMING SOON...</p> -->
         </div>
@@ -351,7 +363,7 @@
         <div style="color:#fff" id="screen3" class="screen">
             <h1>Increase Mining</h1>
             <p id="screen3-text" style="color:#ffa600; font-size:30px; font-weight:bold;">x2</p>
-            <p>Multiple your mining rate</p>
+            <p>increase your mining rate</p>
             <img src="" alt="">
             <small>0.002BNB</small>
 
@@ -405,7 +417,13 @@
 
         </div>
         <div id="wallet-screen" class="screen">
-            <h2 style="color: #fff;">COMING SOON...</h2>
+            <h2 style="color: #fff;">Wallet</h2>
+            <h3 style="color: #fff;">Connect your TON wallet for future rewards</h3>
+            <h3 style="color: #985; font-weight: bold; text-align: left;">TON wallet</h3>
+            <button id="conn-wallet-btn" style="outline: none;">❌</button>
+            <input type="text" id="wallet-link-input" value="" readonly>
+            <button id="copy-wallet-btn" style="outline: none;">🔗</button>
+            <!-- <h2 style="color: #fff;">COMING SOON...</h2> -->
         </div>
 
         <div id="tasks" class="tasks">
@@ -420,6 +438,74 @@
         </div>
 
         <script>
+            // wallet-connection.js
+
+            // Define the available wallet options
+            const walletOptions = [
+              { name: 'TON Wallet', icon: 'ton_symbol.svg' },
+            ];
+
+            // Get the necessary DOM elements
+            const walletLinkInput = document.getElementById('wallet-link-input');
+            const connWalletBtn = document.getElementById('conn-wallet-btn');
+            const copyWalletBtn = document.getElementById('copy-wallet-btn');
+            const walletOptionsContainer = document.createElement('div');
+            walletOptionsContainer.classList.add('wallet-options-container');
+
+            // Populate the wallet options
+            walletOptions.forEach(wallet => {
+              const walletOption = document.createElement('div');
+              walletOption.classList.add('wallet-option');
+              walletOption.innerHTML = `
+                <img src="${wallet.icon}" alt="${wallet.name} logo" style="width: 24px; height: 24px;">
+                <span>${wallet.name}</span>
+              `;
+              walletOption.addEventListener('click', () => connectToWallet(wallet.name));
+              walletOptionsContainer.appendChild(walletOption);
+            });
+
+            // Connect to the selected wallet
+            async function connectToWallet(walletName) {
+              try {
+                let provider;
+                switch (walletName) {
+                  case 'TON Wallet':
+                    provider = await window.ton.requestAccounts();
+                    break;
+                  default:
+                    throw new Error(`Unsupported wallet: ${walletName}`);
+                }
+
+                // Update the wallet link input with the connected wallet address
+                walletLinkInput.value = provider.accounts[0];
+
+                // Hide the wallet options and display the connected wallet address
+                walletOptionsContainer.style.display = 'none';
+                connWalletBtn.style.display = 'none';
+                copyWalletBtn.style.display = 'inline-block';
+              } catch (error) {
+                console.error('Error connecting to wallet:', error);
+                alert(`Error connecting to ${walletName} wallet: ${error.message}`);
+              }
+            }
+
+            // Attach the wallet options to the DOM
+            const walletScreen = document.getElementById('wallet-screen');
+            walletScreen.appendChild(walletOptionsContainer);
+
+            // Handle wallet connection button click
+            connWalletBtn.addEventListener('click', () => {
+              walletOptionsContainer.style.display = 'flex';
+              connWalletBtn.style.display = 'none';
+              copyWalletBtn.style.display = 'none';
+            });
+
+            // Handle wallet address copy button click
+            copyWalletBtn.addEventListener('click', () => {
+              navigator.clipboard.writeText(walletLinkInput.value);
+              alert('Wallet address copied to clipboard!');
+            });
+
 
 
             function vibrate()
@@ -597,6 +683,36 @@
             });
 
 
+
+
+
+
+
+            // ==============================================
+            async function handleClaimSubmission() {
+              try {
+                const response = await fetch('http://localhost:5000/handle_claim', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ claim: 'New Claim' })
+                });
+
+                if (response.ok) {
+                  const data = await response.json();
+                  console.log('Response from Python server:', data);
+                  // You can update the DOM or perform any other actions with the response data
+                  document.getElementById('result').textContent = data.message;
+                } else {
+                  console.error('Error:', response.status);
+                  document.getElementById('result').textContent = 'Error submitting the claim.';
+                }
+              } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').textContent = 'An error occurred. Please try again later.';
+              }
+            }
         </script>
     </body>
 
