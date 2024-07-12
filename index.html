@@ -291,6 +291,13 @@
             .tap-cursor:active {
                 animation: tap-animation 0.2s ease -in -out;
             }
+
+            #game-canvas {
+                border: 1px solid #ccc;
+                /* background-color: white; */
+                /* background: linear-gradient(45deg, #00ff00, #ff00ff, #0000ff, #ff00ff); */
+                background-color: transparent;
+            }
         </style>
     </head>
 
@@ -300,11 +307,7 @@
         <div id="screen1" class="screen active">
             <h2 style="color: rgb(255, 255, 255); font-size:37px; font-weight: bold;" id="tap-count">0.000</h2>
             <h2 id="ligues" style="color: rgb(255, 199, 45)"> <code> <</code> Gold <code>></code> </h2>
-            <img src="aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;"
-                oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;"
-                ondragstart="return false;" onclick="vibrate()">
-
-            <!-- <p style="color:#fff">COMMING SOON...</p> -->
+            <canvas id="game-canvas" width="400" height="600"></canvas>
         </div>
 
         <div id="screen2" class="screen">
@@ -357,7 +360,10 @@
         <div id="ligues-screen" class="screen">
             <p style="font-size:40px; font-weight:bold; color: #fff;">Gold League</p>
             <p style="font-size: 18px; color:#ffd61e; font-weight:bold;  ">You owned this cup</p>
-            <p style="height: 200px; font-size:144px; margin: 5px; color:rgb(255, 208, 0); font-weight:bold;">💫</p>
+            <div id="leaderboardData">
+                <h3>Leaderboard</h3>
+                <ol id="leaderboard-list"></ol>
+            </div>
             <div style="display: flex; flex-direction: column;">
                 <div class="ligue-range">
                     <!-- <p>😑</p> -->
@@ -418,90 +424,43 @@
                 }
             }
 
-            function shareTelegramBotLink()
-            {
-                const botLink = 'https://t.me/Aftribe_bot';
-
-                // Check if the user has a sharing option available
-                if (navigator.share)
-                {
-                    navigator.share({
-                        text: 'Check out AfTribeBot!',
-                        url: botLink
-                    })
-                        .then(() =>
-                        {
-                            console.log('Link shared successfully!');
-                        })
-                        .catch((error) =>
-                        {
-                            console.error('Error sharing link:', error);
-                            // Fallback to copying the link to the clipboard
-                            navigator.clipboard.writeText(botLink)
-                                .then(() =>
-                                {
-                                    alert('Telegram bot link copied to clipboard!');
-                                })
-                                .catch((error) =>
-                                {
-                                    console.error('Error copying link:', error);
-                                });
-                        });
-                } else
-                {
-                    // Fallback to copying the link to the clipboard
-                    navigator.clipboard.writeText(botLink)
-                        .then(() =>
-                        {
-                            alert('Telegram bot link copied to clipboard!');
-                        })
-                        .catch((error) =>
-                        {
-                            console.error('Error copying link:', error);
-                        });
-                }
-            }
-
-            document.getElementById('copy-link-btn').addEventListener('click', shareTelegramBotLink);
-
-
             // document.getElementById('open-app-btn').addEventListener('click', () => {
             //     // Code to communicate with Telegram bot and open the "Web App"
             // });
             // let tapCount = 0;
-            const tapCountDisplay = document.getElementById('tap-count');
+            // const tapCountDisplay = document.getElementById('tap-count');
 
-            let tapCount = 0.000;
-            document.querySelector('.aflogo').addEventListener('click', () =>
-            {
-                // Simulate updating the tap count
-                // let tapCount = parseInt(tapCountDisplay.textContent);
-                // tapCountDisplay.textContent = (++tapCount).toString();
-                let zeropoint = parseFloat(0.001);
-                let result = tapCount += zeropoint;
+            // let tapCount = 0.000;
+            // document.querySelector('.aflogo').addEventListener('click', () =>
+            // {
+            //     // Simulate updating the tap count
+            //     // let tapCount = parseInt(tapCountDisplay.textContent);
+            //     // tapCountDisplay.textContent = (++tapCount).toString();
+            //     let zeropoint = parseFloat(0.001);
+            //     let result = tapCount += zeropoint;
 
-                tapCountDisplay.textContent = result.toFixed(3);
+            //     tapCountDisplay.textContent = result.toFixed(3);
 
 
-                tapCountDisplay.classList.add('animate');
-                setTimeout(() =>
-                {
-                    tapCountDisplay.classList.remove('animate');
-                }, 500);
+            //     tapCountDisplay.classList.add('animate');
+            //     setTimeout(() =>
+            //     {
+            //         tapCountDisplay.classList.remove('animate');
+            //     }, 500);
 
-                const tapAnimation = document.createElement('div');
-                tapAnimation.classList.add('tap-animation');
-                tapAnimation.textContent = '+0.0001';
-                tapAnimation.style.left = event.clientX + 'px';
-                tapAnimation.style.top = event.clientY + 'px';
-                document.body.appendChild(tapAnimation);
-                setTimeout(() =>
-                {
-                    tapAnimation.remove();
-                }, 500);
+            //     const tapAnimation = document.createElement('div');
+            //     tapAnimation.classList.add('tap-animation');
+            //     tapAnimation.textContent = '+0.0001';
+            //     tapAnimation.style.left = event.clientX + 'px';
+            //     tapAnimation.style.top = event.clientY + 'px';
+            //     document.body.appendChild(tapAnimation);
+            //     setTimeout(() =>
+            //     {
+            //         tapAnimation.remove();
+            //     }, 500);
 
-                // sendTapCountToServer(result);
-            });
+            //     // sendTapCountToServer(result);
+            // });
 
             const button1 = document.getElementById('button1');
             const button2 = document.getElementById('button2');
@@ -511,11 +470,12 @@
             const tasks = document.getElementById('tasks');
             const wallet = document.getElementById('wallet');
 
+            // CANVAS ------------PART
+
+
             button1.addEventListener('click', () =>
             {
-                showScreen('screen1');
-                tasks.style.display = 'flex';
-                wallet.style.display = 'flex';
+                playCanvas()
             });
 
             button2.addEventListener('click', () =>
@@ -524,8 +484,77 @@
                 tasks.style.display = 'none';
                 wallet.style.display = 'none';
                 document.getElementById('screen2-text').textContent = 'Join our channel';
-            });
+                function shareTelegramBotLink()
+                {
+                    const botLink = 'https://t.me/Aftribe_bot';
 
+                    // Check if the user has a sharing option available
+                    if (navigator.share)
+                    {
+                        navigator.share({
+                            text: 'Check out AfTribeBot!',
+                            url: botLink
+                        })
+                            .then(() =>
+                            {
+                                console.log('Link shared successfully!');
+                            })
+                            .catch((error) =>
+                            {
+                                console.error('Error sharing link:', error);
+                                // Fallback to copying the link to the clipboard
+                                navigator.clipboard.writeText(botLink)
+                                    .then(() =>
+                                    {
+                                        alert('Telegram bot link copied to clipboard!');
+                                    })
+                                    .catch((error) =>
+                                    {
+                                        console.error('Error copying link:', error);
+                                    });
+                            });
+                    } else
+                    {
+                        // Fallback to copying the link to the clipboard
+                        navigator.clipboard.writeText(botLink)
+                            .then(() =>
+                            {
+                                alert('Telegram bot link copied to clipboard!');
+                            })
+                            .catch((error) =>
+                            {
+                                console.error('Error copying link:', error);
+                            });
+                    }
+                }
+
+                let copyLinkBtn = document.getElementById('copy-link-btn').addEventListener('click', shareTelegramBotLink);
+
+
+                function JoinUs(screenId)
+                {
+                    window.open('https://t.me/aftribe', '_blank');
+                }
+
+                document.getElementById('screen2-text').addEventListener('click', JoinUs);
+                // Get the input field and the copy button
+                const inviteLinkInput = document.getElementById('invite-link-input');
+
+                // Add a click event listener to the copy button
+                copyLinkBtn.addEventListener('click', () =>
+                {
+                    // Select the text in the input field
+                    inviteLinkInput.select();
+                    inviteLinkInput.setSelectionRange(0, 99999); // For mobile devices
+
+                    // Copy the selected text to the clipboard
+                    navigator.clipboard.writeText(inviteLinkInput.value);
+
+                    // Show a success message or perform any other desired action
+                    alert('Invite link copied to clipboard!');
+                });
+
+            });
             button3.addEventListener('click', () =>
             {
                 showScreen('screen3');
@@ -533,7 +562,6 @@
                 wallet.style.display = 'none';
                 document.getElementById('screen3-text').textContent = 'x2';
             });
-
             ligues.addEventListener('click', () =>
             {
                 showScreen('ligues-screen')
@@ -560,30 +588,264 @@
                 document.getElementById(screenId).classList.add('active');
             }
 
-            function JoinUs(screenId)
+
+            function playCanvas(params)
             {
-                window.open('https://t.me/aftribe', '_blank');
+                showScreen('screen1');
+                tasks.style.display = 'flex';
+                wallet.style.display = 'flex';
+
+                const canvas = document.getElementById('game-canvas');
+                // Get the canvas element
+                const ctx = canvas.getContext('2d');
+
+                // Game variables
+                let character = {
+                    x: 50,
+                    y: canvas.height - 50,
+                    width: 50,
+                    height: 50,
+                    velocity: 0,
+                    gravity: 1,
+                    jumpForce: -15
+                };
+
+                let obstacles = [];
+                let powerUps = [];
+                let score = 0;
+                let gameOver = false;
+                let isJumping = false;
+                let jumpHeight = 150;
+                let jumpDuration = 0.5;
+                let jumpStartTime = 0;
+                let powerUpDuration = 10000; // 10 seconds
+                let currentLevel = 1;
+                let obstacleSpeed = 5;
+                let powerUpSpeed = 3;
+                let obstacleSpawnChance = 0.01;
+                let powerUpSpawnChance = 0.005;
+                let highScore = 0; // Initialize high score
+                let leaderboardData = [];
+
+
+                window.addEventListener('click', () =>
+                {
+                    // Start the game
+                    gameLoop(performance.now());
+                    updateLeaderboard();
+                })
+
+                // Load high score from localStorage
+                if (localStorage.getItem('highScore'))
+                {
+                    highScore = parseInt(localStorage.getItem('highScore'));
+                }
+                if (localStorage.getItem('leaderboardData'))
+                {
+                    leaderboardData = JSON.parse(localStorage.getItem('leaderboardData'));
+                }
+
+                // Update leaderboard display
+                function updateLeaderboard()
+                {
+                    const leaderboardList = document.getElementById('leaderboard-list');
+                    leaderboardList.innerHTML = '';
+
+                    leaderboardData.sort((a, b) => b.score - a.score).slice(0, 10).forEach((entry, index) =>
+                    {
+                        const li = document.createElement('li');
+                        li.textContent = `${ index + 1 }. ${ entry.name } - ${ entry.score }`;
+                        leaderboardList.appendChild(li);
+                    });
+                }
+
+                // Game loop
+                function gameLoop(timestamp)
+                {
+                    // Clear the canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // Handle jump
+                    if (isJumping)
+                    {
+                        const elapsedTime = (timestamp - jumpStartTime) / 1000;
+                        if (elapsedTime < jumpDuration)
+                        {
+                            character.y = canvas.height - 50 - jumpHeight * Math.sin((elapsedTime / jumpDuration) * Math.PI);
+                        } else
+                        {
+                            isJumping = false;
+                            character.y = canvas.height - 50;
+                        }
+                    }
+
+
+                    // Draw character
+                    ctx.save();
+                    ctx.translate(character.x, character.y);
+                    ctx.drawImage(characterIcon, 0, 0, character.width, character.height);
+                    ctx.restore();
+                    ////////////////////////////////////////////////////////////////
+                    // ctx.fillText(`🕺`, character.x, character.y);
+                    // ctx.fillRect(50, character.y, character.width, character.height);
+                    // llllllllllllllllllllll
+
+
+                    // Move and draw the obstacles
+                    obstacles.forEach((obstacle, index) =>
+                    {
+                        obstacle.x -= obstacleSpeed;
+                        // ooooooooooooooooooooooooooo
+                        // ctx.save();
+                        // ctx.translate(obstacle.x, obstacle.y);
+                        // ctx.drawImage(obstacleIcon, 0, 0, obstacle.width, obstacle.height);
+                        // ctx.restore();
+                        // ooooooooooooooooooo
+                        // ctx.font = '180px';
+                        // ctx.fillText(`😡`, obstacle.x, obstacle.y);
+                        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+                        // Check for collision
+                        if (
+                            obstacle.x <= 50 + character.width &&
+                            obstacle.x + obstacle.width >= 50 &&
+                            obstacle.y <= character.y + character.height &&
+                            obstacle.y + obstacle.height >= character.y
+                        )
+                        {
+                            gameOver = true;
+                        }
+
+                        // Remove obstacle if it goes off-screen
+                        if (obstacle.x + obstacle.width < 0)
+                        {
+                            obstacles.splice(index, 1);
+                            score++;
+
+                            // Increase difficulty when a certain score threshold is reached
+                            if (score % 10 === 0)
+                            {
+                                currentLevel++;
+                                obstacleSpeed += 1;
+                                powerUpSpeed += 0.5;
+                                obstacleSpawnChance += 0.01;
+                                powerUpSpawnChance += 0.002;
+                            }
+                        }
+                    });
+
+                    // Move and draw the power-ups
+                    powerUps.forEach((powerUp, index) =>
+                    {
+                        powerUp.x -= powerUpSpeed;
+                        // ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+                        //  ctx.save();
+                        // ctx.translate(obstacle.x, obstacle.y);
+                        // ctx.drawImage(obstacleIcon, 0, 0, obstacle.width, obstacle.height);
+                        // ctx.restore();
+                        // ooooooooooooooooooo
+                        // ctx.font = '180px';
+                        ctx.fillText(`😡`, powerUp.x, powerUp.y);
+
+                        // Check for power-up collection
+                        if (
+                            powerUp.x <= 50 + character.width &&
+                            powerUp.x + powerUp.width >= 50 &&
+                            powerUp.y <= character.y + character.height &&
+                            powerUp.y + powerUp.height >= character.y
+                        )
+                        {
+                            powerUps.splice(index, 1);
+                            // Apply power-up effect
+                            jumpHeight = 200;
+                            setTimeout(() =>
+                            {
+                                jumpHeight = 150;
+                            }, powerUpDuration);
+                        }
+
+                        // Remove power-up if it goes off-screen
+                        if (powerUp.x + powerUp.width < 0)
+                        {
+                            powerUps.splice(index, 1);
+                        }
+                    });
+
+                    // Add a new obstacle periodically
+                    if (Math.random() < 0.01)
+                    {
+                        obstacles.push({
+                            x: canvas.width,
+                            y: canvas.height - 50,
+                            width: 10,
+                            height: Math.floor(Math.random() * (60)) + 20,
+                        });
+                    }
+
+                    // Add a new power-up periodically
+                    if (Math.random() < powerUpSpawnChance)
+                    {
+                        powerUps.push({
+                            x: canvas.width,
+                            y: Math.floor(Math.random() * (canvas.height - 50 - 25)) + 25,
+                            width: 25,
+                            height: 25,
+                        });
+                    }
+
+                    // Draw the score, current level, and high score
+                    ctx.font = '24px Arial';
+                    ctx.fillText(`Claimed: ${ 2000 + score }`, 10, 30);
+                    ctx.fillText(`Level: ${ currentLevel }`, 10, 60);
+                    // ctx.fillText(`High Score: ${ highScore }`, 10, 90);
+
+                    // Game over
+                    if (gameOver)
+                    {
+                        // Update high score if current score is higher
+                        if (score > highScore)
+                        {
+                            highScore = score;
+                            localStorage.setItem('highScore', highScore.toString());
+
+                            // Add the new high score to the leaderboard
+                            leaderboardData.push({ name: 'Rashid', score: score });
+                            localStorage.setItem('leaderboard', JSON.stringify(leaderboardData));
+                            updateLeaderboard();
+                        }
+
+                        ctx.font = '48px Arial';
+                        ctx.fillText(`${ score }`, canvas.width / 2 - 12, canvas.height / 2);
+                    } else
+                    {
+                        requestAnimationFrame(gameLoop);
+                    }
+
+
+                    // Handle jump input
+                    document.addEventListener('keydown', (event) =>
+                    {
+                        if (event.code === 'Space' && !isJumping)
+                        {
+                            isJumping = true;
+                            jumpStartTime = performance.now();
+                        }
+                    });
+
+                }
+
+                // Load SVG icons
+                const characterIcon = new Image();
+                characterIcon.src = 'aflogo.png'
+                // characterIcon.src = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-13.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm3 10c3.31 0 6-2.69 6-6 0-.79-.15-1.56-.44-2.22l-2.76 2.76c.03.18.05.37.05.57 0 1.66-1.34 3-3 3s-3-1.34-3-3c0-.2.02-.39.05-.57l-2.76-2.76c-.29.66-.44 1.43-.44 2.22 0 3.31 2.69 6 6 6z'/%3E%3C/svg%3E";
+
+                const obstacleIcon = new Image();
+                obstacleIcon.src = 'aflogo.png';
+                // obstacleIcon.src = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14.5V7c0-.41-.34-.75-.75-.75s-.75.34-.75.75v10.5c0 .41.34.75.75.75s.75-.34.75-.75z'/%3E%3C/svg%3E";
+
+
             }
-
-            document.getElementById('screen2-text').addEventListener('click', JoinUs);
-            // Get the input field and the copy button
-            const inviteLinkInput = document.getElementById('invite-link-input');
-
-            // Add a click event listener to the copy button
-            copyLinkBtn.addEventListener('click', () =>
-            {
-                // Select the text in the input field
-                inviteLinkInput.select();
-                inviteLinkInput.setSelectionRange(0, 99999); // For mobile devices
-
-                // Copy the selected text to the clipboard
-                navigator.clipboard.writeText(inviteLinkInput.value);
-
-                // Show a success message or perform any other desired action
-                alert('Invite link copied to clipboard!');
-            });
-
-
+            playCanvas();
         </script>
     </body>
 
