@@ -786,9 +786,9 @@
 
 
                         // Handle jump input
-                        document.addEventListener('keydown', (event) =>
+                        canvas.addEventListener('click', (event) =>
                         {
-                            if (event.code === 'Space' && !isJumping)
+                            if (!isJumping)
                             {
                                 isJumping = true;
                                 jumpStartTime = performance.now();
