@@ -81,12 +81,12 @@
             }
 
             .screen {
-                position: absolute;
+                /* position: absolute;
                 top: 5%;
                 left: 50%;
-                transform: translate(-50%, 0);
+                transform: translate(-50%, 0); */
                 text-align: center;
-                padding: 20px;
+                padding-top: 20px;
                 width: 100%;
                 max-width: 600px;
                 display: none;
@@ -297,9 +297,9 @@
             #game-canvas {
                 border: none;
                 /* background: linear-gradient(365deg, #b1550000, #1600b1, #d0580000, #bfcfff00, #0000a500, #00f0); */
-                height: 100%;
-                width: 95%;
-                background-color: transparent;
+                height: 60vh;
+                width: 100vw;
+                background-color: bisque;
             }
         </style>
     </head>
@@ -781,7 +781,7 @@
                                 // canvas.style.display = 'none';
                                 play_page.style.display = 'block';
                                 playCanvas()
-                            }, 3000)
+                            }, 5000)
                         }
 
 
