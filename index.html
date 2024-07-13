@@ -14,8 +14,9 @@
                 min-height: 80vh;
                 margin: 0;
                 font-family: OCR-A BT, sans-serif;
-                background: linear-gradient(45deg, #00ff00, #ff00ff, #0000ff, #ff00ff);
-                background-size: 100% 400%;
+                background: linear-gradient(365deg, #b15500, #b15500, #d05800, #bfcfff, #0000a5, #00f);
+                background-size: auto;
+                background-size: 100% 168%;
                 user-select: none;
                 /*            animation: colorChange 10s ease infinite;*/
             }
@@ -59,6 +60,7 @@
             #tap-count {
                 font-size: 25px;
                 font-weight: bold;
+                margin: 0;
             }
 
             button {
@@ -85,7 +87,7 @@
                 transform: translate(-50%, 0);
                 text-align: center;
                 padding: 20px;
-                width: 80%;
+                width: 100%;
                 max-width: 600px;
                 display: none;
             }
@@ -152,8 +154,8 @@
 
             .tasks {
                 position: absolute;
-                bottom: 20%;
-                left: 5%;
+                top: 20%;
+                right: 5%;
                 display: flex;
                 flex-direction: column;
             }
@@ -293,9 +295,10 @@
             }
 
             #game-canvas {
-                border: 1px solid #ccc;
-                /* background-color: white; */
-                /* background: linear-gradient(45deg, #00ff00, #ff00ff, #0000ff, #ff00ff); */
+                border: none;
+                /* background: linear-gradient(365deg, #b1550000, #1600b1, #d0580000, #bfcfff00, #0000a500, #00f0); */
+                height: 100%;
+                width: 95%;
                 background-color: transparent;
             }
         </style>
@@ -428,9 +431,9 @@
             //     // Code to communicate with Telegram bot and open the "Web App"
             // });
             // let tapCount = 0;
-            // const tapCountDisplay = document.getElementById('tap-count');
-
-            // let tapCount = 0.000;
+            const tapCountDisplay = document.getElementById('tap-count');
+            let zeropoint = parseFloat(0.001);
+            let tapCount = 0.000;
             // document.querySelector('.aflogo').addEventListener('click', () =>
             // {
             //     // Simulate updating the tap count
@@ -603,7 +606,7 @@
                 let character = {
                     x: 50,
                     y: canvas.height - 50,
-                    width: 50,
+                    width: 20,
                     height: 50,
                     velocity: 0,
                     gravity: 1,
@@ -615,7 +618,7 @@
                 let score = 0;
                 let gameOver = false;
                 let isJumping = false;
-                let jumpHeight = 150;
+                let jumpHeight = 350;
                 let jumpDuration = 0.5;
                 let jumpStartTime = 0;
                 let powerUpDuration = 10000; // 10 seconds
@@ -623,41 +626,42 @@
                 let obstacleSpeed = 5;
                 let powerUpSpeed = 3;
                 let obstacleSpawnChance = 0.01;
-                let powerUpSpawnChance = 0.005;
+                let powerUpSpawnChance = 0.04;
                 let highScore = 0; // Initialize high score
                 let leaderboardData = [];
+
 
 
                 window.addEventListener('click', () =>
                 {
                     // Start the game
                     gameLoop(performance.now());
-                    updateLeaderboard();
+                    // updateLeaderboard();
                 })
 
                 // Load high score from localStorage
-                if (localStorage.getItem('highScore'))
-                {
-                    highScore = parseInt(localStorage.getItem('highScore'));
-                }
-                if (localStorage.getItem('leaderboardData'))
-                {
-                    leaderboardData = JSON.parse(localStorage.getItem('leaderboardData'));
-                }
+                // if (localStorage.getItem('highScore'))
+                // {
+                //     highScore = parseInt(localStorage.getItem('highScore'));
+                // }
+                // if (localStorage.getItem('leaderboardData'))
+                // {
+                //     leaderboardData = JSON.parse(localStorage.getItem('leaderboardData'));
+                // }
 
                 // Update leaderboard display
-                function updateLeaderboard()
-                {
-                    const leaderboardList = document.getElementById('leaderboard-list');
-                    leaderboardList.innerHTML = '';
+                // function updateLeaderboard()
+                // {
+                //     const leaderboardList = document.getElementById('leaderboard-list');
+                //     leaderboardList.innerHTML = '';
 
-                    leaderboardData.sort((a, b) => b.score - a.score).slice(0, 10).forEach((entry, index) =>
-                    {
-                        const li = document.createElement('li');
-                        li.textContent = `${ index + 1 }. ${ entry.name } - ${ entry.score }`;
-                        leaderboardList.appendChild(li);
-                    });
-                }
+                //     leaderboardData.sort((a, b) => b.score - a.score).slice(0, 10).forEach((entry, index) =>
+                //     {
+                //         const li = document.createElement('li');
+                //         li.textContent = `${ index + 1 }. ${ entry.name } - ${ entry.score }`;
+                //         leaderboardList.appendChild(li);
+                //     });
+                // }
 
                 // Game loop
                 function gameLoop(timestamp)
@@ -681,13 +685,16 @@
 
 
                     // Draw character
-                    ctx.save();
-                    ctx.translate(character.x, character.y);
-                    ctx.drawImage(characterIcon, 0, 0, character.width, character.height);
-                    ctx.restore();
+                    // ctx.save();
+                    // ctx.translate(character.x, character.y);
+                    // ctx.drawImage(characterIcon, 0, 0, character.width, character.height);
+                    // ctx.restore();
                     ////////////////////////////////////////////////////////////////
                     // ctx.fillText(`🕺`, character.x, character.y);
                     // ctx.fillRect(50, character.y, character.width, character.height);
+                    // ctx.fillText('🙂', 50, character.y, character.width, character.height)
+                    ctx.font = '58px Arial';
+                    ctx.fillText('🚙', 50, character.y)
                     // llllllllllllllllllllll
 
 
@@ -701,9 +708,9 @@
                         // ctx.drawImage(obstacleIcon, 0, 0, obstacle.width, obstacle.height);
                         // ctx.restore();
                         // ooooooooooooooooooo
-                        // ctx.font = '180px';
-                        // ctx.fillText(`😡`, obstacle.x, obstacle.y);
-                        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                        ctx.font = '50px Arial';
+                        ctx.fillText(`🔥`, obstacle.x, obstacle.y);
+                        // ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
                         // Check for collision
                         if (
@@ -729,7 +736,7 @@
                                 obstacleSpeed += 1;
                                 powerUpSpeed += 0.5;
                                 obstacleSpawnChance += 0.01;
-                                powerUpSpawnChance += 0.002;
+                                powerUpSpawnChance += 0.06;
                             }
                         }
                     });
@@ -744,8 +751,8 @@
                         // ctx.drawImage(obstacleIcon, 0, 0, obstacle.width, obstacle.height);
                         // ctx.restore();
                         // ooooooooooooooooooo
-                        // ctx.font = '180px';
-                        ctx.fillText(`😡`, powerUp.x, powerUp.y);
+                        ctx.font = '38px Arial';
+                        ctx.fillText(`🪙`, powerUp.x, powerUp.y);
 
                         // Check for power-up collection
                         if (
@@ -757,11 +764,39 @@
                         {
                             powerUps.splice(index, 1);
                             // Apply power-up effect
-                            jumpHeight = 200;
+                            // jumpHeight = 200;
+                            // setTimeout(() =>
+                            // {
+                            //     jumpHeight = 150;
+                            // }, powerUpDuration);
+
+                            // Simulate updating the tap count
+                            // let tapCount = parseInt(tapCountDisplay.textContent);
+                            // tapCountDisplay.textContent = (++tapCount).toString();
+
+                            let result = tapCount += zeropoint;
+
+                            tapCountDisplay.textContent = result.toFixed(3);
+
+
+                            tapCountDisplay.classList.add('animate');
                             setTimeout(() =>
                             {
-                                jumpHeight = 150;
-                            }, powerUpDuration);
+                                tapCountDisplay.classList.remove('animate');
+                            }, 500);
+
+                            const tapAnimation = document.createElement('div');
+                            tapAnimation.classList.add('tap-animation');
+                            tapAnimation.textContent = '1';
+                            tapAnimation.style.left = powerUp.x + 'px';
+                            tapAnimation.style.top = powerUp.y + 80 + 'px';
+                            document.body.appendChild(tapAnimation);
+                            setTimeout(() =>
+                            {
+                                tapAnimation.remove();
+                            }, 500);
+
+                            // sendTapCountToServer(result);
                         }
 
                         // Remove power-up if it goes off-screen
@@ -787,15 +822,15 @@
                     {
                         powerUps.push({
                             x: canvas.width,
-                            y: Math.floor(Math.random() * (canvas.height - 50 - 25)) + 25,
+                            y: 550,
                             width: 25,
                             height: 25,
                         });
                     }
-
+                    // Math.floor(Math.random() * (canvas.height - 50 - 25)) + 25
                     // Draw the score, current level, and high score
                     ctx.font = '24px Arial';
-                    ctx.fillText(`Claimed: ${ 2000 + score }`, 10, 30);
+                    // ctx.fillText(`Claimed: ${ 2000 + score }`, 10, 30);
                     ctx.fillText(`Level: ${ currentLevel }`, 10, 60);
                     // ctx.fillText(`High Score: ${ highScore }`, 10, 90);
 
@@ -803,19 +838,19 @@
                     if (gameOver)
                     {
                         // Update high score if current score is higher
-                        if (score > highScore)
-                        {
-                            highScore = score;
-                            localStorage.setItem('highScore', highScore.toString());
+                        // if (score > highScore)
+                        // {
+                        //     highScore = score;
+                        //     localStorage.setItem('highScore', highScore.toString());
 
-                            // Add the new high score to the leaderboard
-                            leaderboardData.push({ name: 'Rashid', score: score });
-                            localStorage.setItem('leaderboard', JSON.stringify(leaderboardData));
-                            updateLeaderboard();
-                        }
+                        //     // Add the new high score to the leaderboard
+                        //     leaderboardData.push({ name: 'Rashid', score: score });
+                        //     localStorage.setItem('leaderboard', JSON.stringify(leaderboardData));
+                        //     updateLeaderboard();
+                        // }
 
                         ctx.font = '48px Arial';
-                        ctx.fillText(`${ score }`, canvas.width / 2 - 12, canvas.height / 2);
+                        ctx.fillText(`${ score }🔥`, canvas.width / 2 - 12, canvas.height / 2);
                     } else
                     {
                         requestAnimationFrame(gameLoop);
