@@ -290,9 +290,9 @@
                 }
             }
 
-            .tap-cursor:active {
+            /* .tap-cursor:active {
                 animation: tap-animation 0.2s ease -in -out;
-            }
+            } */
 
             #game-canvas {
                 border: none;
@@ -310,6 +310,9 @@
         <div id="screen1" class="screen active">
             <h2 style="color: rgb(255, 255, 255); font-size:37px; font-weight: bold;" id="tap-count">0.000</h2>
             <h2 id="ligues" style="color: rgb(255, 199, 45)"> <code> <</code> Gold <code>></code> </h2>
+            <div id="play_page">
+                <button id="play-btn">play</button>
+            </div>
             <canvas id="game-canvas" width="400" height="600"></canvas>
         </div>
 
@@ -356,7 +359,7 @@
 
         <div class="button-container">
             <button id="button2" style="outline: none;">Friends 👥</button>
-            <button id="button1" style="outline: none;">Mining ⛏️</button>
+            <button id="button1" style="outline: none;">Mine ⛏️</button>
             <button id="button3" style="outline: none;">Boost 🚀</button>
         </div>
 
@@ -416,55 +419,6 @@
         </div>
 
         <script>
-
-
-            function vibrate()
-            {
-                if (navigator.vibrate)
-                {
-                    // Vibrate for 100 milliseconds
-                    navigator.vibrate(1);
-                }
-            }
-
-            // document.getElementById('open-app-btn').addEventListener('click', () => {
-            //     // Code to communicate with Telegram bot and open the "Web App"
-            // });
-            // let tapCount = 0;
-            const tapCountDisplay = document.getElementById('tap-count');
-            let zeropoint = parseFloat(0.001);
-            let tapCount = 0.000;
-            // document.querySelector('.aflogo').addEventListener('click', () =>
-            // {
-            //     // Simulate updating the tap count
-            //     // let tapCount = parseInt(tapCountDisplay.textContent);
-            //     // tapCountDisplay.textContent = (++tapCount).toString();
-            //     let zeropoint = parseFloat(0.001);
-            //     let result = tapCount += zeropoint;
-
-            //     tapCountDisplay.textContent = result.toFixed(3);
-
-
-            //     tapCountDisplay.classList.add('animate');
-            //     setTimeout(() =>
-            //     {
-            //         tapCountDisplay.classList.remove('animate');
-            //     }, 500);
-
-            //     const tapAnimation = document.createElement('div');
-            //     tapAnimation.classList.add('tap-animation');
-            //     tapAnimation.textContent = '+0.0001';
-            //     tapAnimation.style.left = event.clientX + 'px';
-            //     tapAnimation.style.top = event.clientY + 'px';
-            //     document.body.appendChild(tapAnimation);
-            //     setTimeout(() =>
-            //     {
-            //         tapAnimation.remove();
-            //     }, 500);
-
-            //     // sendTapCountToServer(result);
-            // });
-
             const button1 = document.getElementById('button1');
             const button2 = document.getElementById('button2');
             const button3 = document.getElementById('button3');
@@ -474,10 +428,18 @@
             const wallet = document.getElementById('wallet');
 
             // CANVAS ------------PART
-
+            const play_page = document.getElementById('play_page')
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            const tapCountDisplay = document.getElementById('tap-count');
+            let zeropoint = parseFloat(0.001);
+            let tapCount = 0.000;
 
             button1.addEventListener('click', () =>
             {
+                showScreen('screen1');
+                tasks.style.display = 'flex';
+                wallet.style.display = 'flex';
                 playCanvas()
             });
 
@@ -594,14 +556,6 @@
 
             function playCanvas(params)
             {
-                showScreen('screen1');
-                tasks.style.display = 'flex';
-                wallet.style.display = 'flex';
-
-                const canvas = document.getElementById('game-canvas');
-                // Get the canvas element
-                const ctx = canvas.getContext('2d');
-
                 // Game variables
                 let character = {
                     x: 50,
@@ -630,255 +584,232 @@
                 let highScore = 0; // Initialize high score
                 let leaderboardData = [];
 
+                canvas.style.display = 'none';
+                const playBtn = document.getElementById('play-btn');
 
-
-                window.addEventListener('click', () =>
+                console.log(gameOver);
+                playBtn.addEventListener('click', () =>
                 {
-                    // Start the game
-                    gameLoop(performance.now());
-                    // updateLeaderboard();
+                    play_page.style.display = 'none';
+                    canvas.style.display = 'block';
+                    character.x = 50;
+                    character.y = canvas.height - 50;
+                    character.width = 20;
+                    character.height = 50;
+                    character.velocity = 0;
+                    character.gravity = 1;
+                    character.jumpForce = -15;
+                    obstacles = [];
+                    powerUps = [];
+                    score = 0;
+                    gameOver = false;
+                    isJumping = false;
+                    jumpHeight = 350;
+                    jumpDuration = 0.5;
+                    jumpStartTime = 0;
+                    powerUpDuration = 10000; // 10 seconds
+                    currentLevel = 1;
+                    obstacleSpeed = 5;
+                    powerUpSpeed = 3;
+                    obstacleSpawnChance = 0.01;
+                    powerUpSpawnChance = 0.04;
+                    highScore = 0; // Initialize high score
+                    leaderboardData = [];
+                    startGame()
                 })
 
-                // Load high score from localStorage
-                // if (localStorage.getItem('highScore'))
-                // {
-                //     highScore = parseInt(localStorage.getItem('highScore'));
-                // }
-                // if (localStorage.getItem('leaderboardData'))
-                // {
-                //     leaderboardData = JSON.parse(localStorage.getItem('leaderboardData'));
-                // }
 
-                // Update leaderboard display
-                // function updateLeaderboard()
-                // {
-                //     const leaderboardList = document.getElementById('leaderboard-list');
-                //     leaderboardList.innerHTML = '';
-
-                //     leaderboardData.sort((a, b) => b.score - a.score).slice(0, 10).forEach((entry, index) =>
-                //     {
-                //         const li = document.createElement('li');
-                //         li.textContent = `${ index + 1 }. ${ entry.name } - ${ entry.score }`;
-                //         leaderboardList.appendChild(li);
-                //     });
-                // }
-
-                // Game loop
-                function gameLoop(timestamp)
+                function startGame(params)
                 {
-                    // Clear the canvas
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                    // Handle jump
-                    if (isJumping)
+                    // Game loop
+                    function gameLoop(timestamp)
                     {
-                        const elapsedTime = (timestamp - jumpStartTime) / 1000;
-                        if (elapsedTime < jumpDuration)
+                        // Clear the canvas
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        if (!gameOver)
                         {
-                            character.y = canvas.height - 50 - jumpHeight * Math.sin((elapsedTime / jumpDuration) * Math.PI);
+                            // Handle jump
+                            if (isJumping)
+                            {
+                                const elapsedTime = (timestamp - jumpStartTime) / 1000;
+                                if (elapsedTime < jumpDuration)
+                                {
+                                    character.y = canvas.height - 50 - jumpHeight * Math.sin((elapsedTime / jumpDuration) * Math.PI);
+                                } else
+                                {
+                                    isJumping = false;
+                                    character.y = canvas.height - 50;
+                                }
+                            }
+
+
+                            // Draw character
+                            ctx.save();
+                            ctx.font = '58px Arial';
+                            ctx.translate(200, 0);
+                            ctx.scale(-1, 1);
+                            ctx.fillText('🚙', 100, character.y);
+                            ctx.restore();
+
+                            // Move and draw the obstacles
+                            obstacles.forEach((obstacle, index) =>
+                            {
+                                obstacle.x -= obstacleSpeed;
+                                ctx.save();
+                                ctx.font = '50px Arial';
+                                ctx.fillText(`🔥`, obstacle.x, obstacle.y);
+                                ctx.restore();
+
+                                // Check for collision
+                                if (
+                                    obstacle.x <= 50 + character.width &&
+                                    obstacle.x + obstacle.width >= 50 &&
+                                    obstacle.y <= character.y + character.height &&
+                                    obstacle.y + obstacle.height >= character.y
+                                )
+                                {
+                                    gameOver = true;
+                                    gameOvered()
+                                }
+
+                                // Remove obstacle if it goes off-screen
+                                if (obstacle.x + obstacle.width < 0)
+                                {
+                                    obstacles.splice(index, 1);
+                                    score++;
+
+                                    // Increase difficulty when a certain score threshold is reached
+                                    if (score % 10 === 0)
+                                    {
+                                        currentLevel++;
+                                        obstacleSpeed += 1;
+                                        powerUpSpeed += 0.5;
+                                        obstacleSpawnChance += 0.01;
+                                        powerUpSpawnChance += 0.06;
+                                    }
+                                }
+                            });
+
+                            // Move and draw the power-ups
+                            powerUps.forEach((powerUp, index) =>
+                            {
+                                powerUp.x -= powerUpSpeed;
+                                ctx.font = '38px Arial';
+                                ctx.fillText(`🪙`, powerUp.x, powerUp.y);
+
+                                // Check for power-up collection
+                                if (
+                                    powerUp.x <= 50 + character.width &&
+                                    powerUp.x + powerUp.width >= 50 &&
+                                    powerUp.y <= character.y + character.height &&
+                                    powerUp.y + powerUp.height >= character.y
+                                )
+                                {
+                                    powerUps.splice(index, 1);
+                                    let result = tapCount += zeropoint;
+                                    tapCountDisplay.textContent = result.toFixed(3);
+                                    tapCountDisplay.classList.add('animate');
+
+                                    setTimeout(() =>
+                                    {
+                                        tapCountDisplay.classList.remove('animate');
+                                    }, 500);
+
+                                    const tapAnimation = document.createElement('div');
+                                    tapAnimation.classList.add('tap-animation');
+                                    tapAnimation.textContent = '1';
+                                    tapAnimation.style.left = powerUp.x + 'px';
+                                    tapAnimation.style.top = powerUp.y + 80 + 'px';
+                                    document.body.appendChild(tapAnimation);
+
+                                    setTimeout(() =>
+                                    {
+                                        tapAnimation.remove();
+                                    }, 500);
+
+                                    // sendTapCountToServer(result);
+                                }
+
+                                // Remove power-up if it goes off-screen
+                                if (powerUp.x + powerUp.width < 0)
+                                {
+                                    powerUps.splice(index, 1);
+                                }
+                            });
+
+                            // Add a new obstacle periodically
+                            if (Math.random() < 0.01)
+                            {
+                                obstacles.push({
+                                    x: canvas.width,
+                                    y: canvas.height - 50,
+                                    width: 10,
+                                    height: Math.floor(Math.random() * (60)) + 20,
+                                });
+                            }
+
+                            // Add a new power-up periodically
+                            if (Math.random() < powerUpSpawnChance)
+                            {
+                                powerUps.push({
+                                    x: canvas.width,
+                                    y: 550,
+                                    width: 25,
+                                    height: 25,
+                                });
+                            }
+
+                            requestAnimationFrame(gameLoop);
                         } else
                         {
-                            isJumping = false;
-                            character.y = canvas.height - 50;
-                        }
-                    }
-
-
-                    // Draw character
-                    // ctx.save();
-                    // ctx.translate(character.x, character.y);
-                    // ctx.drawImage(characterIcon, 0, 0, character.width, character.height);
-                    // ctx.restore();
-                    ////////////////////////////////////////////////////////////////
-                    // ctx.fillText(`🕺`, character.x, character.y);
-                    // ctx.fillRect(50, character.y, character.width, character.height);
-                    // ctx.fillText('🙂', 50, character.y, character.width, character.height)
-                    ctx.font = '58px Arial';
-                    ctx.fillText('🚙', 50, character.y)
-                    // llllllllllllllllllllll
-
-
-                    // Move and draw the obstacles
-                    obstacles.forEach((obstacle, index) =>
-                    {
-                        obstacle.x -= obstacleSpeed;
-                        // ooooooooooooooooooooooooooo
-                        // ctx.save();
-                        // ctx.translate(obstacle.x, obstacle.y);
-                        // ctx.drawImage(obstacleIcon, 0, 0, obstacle.width, obstacle.height);
-                        // ctx.restore();
-                        // ooooooooooooooooooo
-                        ctx.font = '50px Arial';
-                        ctx.fillText(`🔥`, obstacle.x, obstacle.y);
-                        // ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-
-                        // Check for collision
-                        if (
-                            obstacle.x <= 50 + character.width &&
-                            obstacle.x + obstacle.width >= 50 &&
-                            obstacle.y <= character.y + character.height &&
-                            obstacle.y + obstacle.height >= character.y
-                        )
-                        {
                             gameOver = true;
+                            gameOvered();
+                        }
+                        ctx.font = '24px Arial';
+                        ctx.fillText(`Level: ${ currentLevel }`, 10, 60);
+
+                        // Game over
+                        function gameOvered()
+                        {
+                            console.log(gameOver, 'ggggggggg');
+                            ctx.font = '48px Arial';
+                            ctx.fillText(`${ score }🔥`, canvas.width / 2 - 12, canvas.height / 2);
+                            setTimeout(() =>
+                            {
+                                // canvas.style.display = 'none';
+                                play_page.style.display = 'block';
+                                playCanvas()
+                            }, 3000)
                         }
 
-                        // Remove obstacle if it goes off-screen
-                        if (obstacle.x + obstacle.width < 0)
-                        {
-                            obstacles.splice(index, 1);
-                            score++;
 
-                            // Increase difficulty when a certain score threshold is reached
-                            if (score % 10 === 0)
+                        // Handle jump input
+                        document.addEventListener('keydown', (event) =>
+                        {
+                            if (event.code === 'Space' && !isJumping)
                             {
-                                currentLevel++;
-                                obstacleSpeed += 1;
-                                powerUpSpeed += 0.5;
-                                obstacleSpawnChance += 0.01;
-                                powerUpSpawnChance += 0.06;
+                                isJumping = true;
+                                jumpStartTime = performance.now();
                             }
-                        }
-                    });
-
-                    // Move and draw the power-ups
-                    powerUps.forEach((powerUp, index) =>
-                    {
-                        powerUp.x -= powerUpSpeed;
-                        // ctx.fillRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height);
-                        //  ctx.save();
-                        // ctx.translate(obstacle.x, obstacle.y);
-                        // ctx.drawImage(obstacleIcon, 0, 0, obstacle.width, obstacle.height);
-                        // ctx.restore();
-                        // ooooooooooooooooooo
-                        ctx.font = '38px Arial';
-                        ctx.fillText(`🪙`, powerUp.x, powerUp.y);
-
-                        // Check for power-up collection
-                        if (
-                            powerUp.x <= 50 + character.width &&
-                            powerUp.x + powerUp.width >= 50 &&
-                            powerUp.y <= character.y + character.height &&
-                            powerUp.y + powerUp.height >= character.y
-                        )
-                        {
-                            powerUps.splice(index, 1);
-                            // Apply power-up effect
-                            // jumpHeight = 200;
-                            // setTimeout(() =>
-                            // {
-                            //     jumpHeight = 150;
-                            // }, powerUpDuration);
-
-                            // Simulate updating the tap count
-                            // let tapCount = parseInt(tapCountDisplay.textContent);
-                            // tapCountDisplay.textContent = (++tapCount).toString();
-
-                            let result = tapCount += zeropoint;
-
-                            tapCountDisplay.textContent = result.toFixed(3);
-
-
-                            tapCountDisplay.classList.add('animate');
-                            setTimeout(() =>
-                            {
-                                tapCountDisplay.classList.remove('animate');
-                            }, 500);
-
-                            const tapAnimation = document.createElement('div');
-                            tapAnimation.classList.add('tap-animation');
-                            tapAnimation.textContent = '1';
-                            tapAnimation.style.left = powerUp.x + 'px';
-                            tapAnimation.style.top = powerUp.y + 80 + 'px';
-                            document.body.appendChild(tapAnimation);
-                            setTimeout(() =>
-                            {
-                                tapAnimation.remove();
-                            }, 500);
-
-                            // sendTapCountToServer(result);
-                        }
-
-                        // Remove power-up if it goes off-screen
-                        if (powerUp.x + powerUp.width < 0)
-                        {
-                            powerUps.splice(index, 1);
-                        }
-                    });
-
-                    // Add a new obstacle periodically
-                    if (Math.random() < 0.01)
-                    {
-                        obstacles.push({
-                            x: canvas.width,
-                            y: canvas.height - 50,
-                            width: 10,
-                            height: Math.floor(Math.random() * (60)) + 20,
                         });
+
                     }
 
-                    // Add a new power-up periodically
-                    if (Math.random() < powerUpSpawnChance)
-                    {
-                        powerUps.push({
-                            x: canvas.width,
-                            y: 550,
-                            width: 25,
-                            height: 25,
-                        });
-                    }
-                    // Math.floor(Math.random() * (canvas.height - 50 - 25)) + 25
-                    // Draw the score, current level, and high score
-                    ctx.font = '24px Arial';
-                    // ctx.fillText(`Claimed: ${ 2000 + score }`, 10, 30);
-                    ctx.fillText(`Level: ${ currentLevel }`, 10, 60);
-                    // ctx.fillText(`High Score: ${ highScore }`, 10, 90);
+                    // Load SVG icons
+                    const characterIcon = new Image();
+                    characterIcon.src = 'aflogo.png'
+                    // characterIcon.src = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-13.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm3 10c3.31 0 6-2.69 6-6 0-.79-.15-1.56-.44-2.22l-2.76 2.76c.03.18.05.37.05.57 0 1.66-1.34 3-3 3s-3-1.34-3-3c0-.2.02-.39.05-.57l-2.76-2.76c-.29.66-.44 1.43-.44 2.22 0 3.31 2.69 6 6 6z'/%3E%3C/svg%3E";
 
-                    // Game over
-                    if (gameOver)
-                    {
-                        // Update high score if current score is higher
-                        // if (score > highScore)
-                        // {
-                        //     highScore = score;
-                        //     localStorage.setItem('highScore', highScore.toString());
+                    const obstacleIcon = new Image();
+                    obstacleIcon.src = 'aflogo.png';
+                    // obstacleIcon.src = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14.5V7c0-.41-.34-.75-.75-.75s-.75.34-.75.75v10.5c0 .41.34.75.75.75s.75-.34.75-.75z'/%3E%3C/svg%3E";
 
-                        //     // Add the new high score to the leaderboard
-                        //     leaderboardData.push({ name: 'Rashid', score: score });
-                        //     localStorage.setItem('leaderboard', JSON.stringify(leaderboardData));
-                        //     updateLeaderboard();
-                        // }
-
-                        ctx.font = '48px Arial';
-                        ctx.fillText(`${ score }🔥`, canvas.width / 2 - 12, canvas.height / 2);
-                    } else
-                    {
-                        requestAnimationFrame(gameLoop);
-                    }
-
-
-                    // Handle jump input
-                    document.addEventListener('keydown', (event) =>
-                    {
-                        if (event.code === 'Space' && !isJumping)
-                        {
-                            isJumping = true;
-                            jumpStartTime = performance.now();
-                        }
-                    });
+                    // Start the game
+                    gameLoop(performance.now());
 
                 }
-
-                // Load SVG icons
-                const characterIcon = new Image();
-                characterIcon.src = 'aflogo.png'
-                // characterIcon.src = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-13.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm3 10c3.31 0 6-2.69 6-6 0-.79-.15-1.56-.44-2.22l-2.76 2.76c.03.18.05.37.05.57 0 1.66-1.34 3-3 3s-3-1.34-3-3c0-.2.02-.39.05-.57l-2.76-2.76c-.29.66-.44 1.43-.44 2.22 0 3.31 2.69 6 6 6z'/%3E%3C/svg%3E";
-
-                const obstacleIcon = new Image();
-                obstacleIcon.src = 'aflogo.png';
-                // obstacleIcon.src = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14.5V7c0-.41-.34-.75-.75-.75s-.75.34-.75.75v10.5c0 .41.34.75.75.75s.75-.34.75-.75z'/%3E%3C/svg%3E";
-
-
             }
             playCanvas();
         </script>
