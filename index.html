@@ -560,8 +560,8 @@
                 let character = {
                     x: 50,
                     y: canvas.height - 50,
-                    width: 20,
-                    height: 50,
+                    width: 30,
+                    height: 20,
                     velocity: 0,
                     gravity: 1,
                     jumpForce: -15
@@ -572,14 +572,14 @@
                 let score = 0;
                 let gameOver = false;
                 let isJumping = false;
-                let jumpHeight = 350;
-                let jumpDuration = 0.5;
+                let jumpHeight = 250;
+                let jumpDuration = 0.8;
                 let jumpStartTime = 0;
                 let powerUpDuration = 10000; // 10 seconds
-                let currentLevel = 1;
-                let obstacleSpeed = 5;
+                let currentLevel = 0.2;
+                let obstacleSpeed = 3;
                 let powerUpSpeed = 3;
-                let obstacleSpawnChance = 0.01;
+                let obstacleSpawnChance = 0.008;
                 let powerUpSpawnChance = 0.04;
                 let highScore = 0; // Initialize high score
                 let leaderboardData = [];
@@ -604,14 +604,14 @@
                     score = 0;
                     gameOver = false;
                     isJumping = false;
-                    jumpHeight = 350;
-                    jumpDuration = 0.5;
+                    jumpHeight = 250;
+                    jumpDuration = 0.8;
                     jumpStartTime = 0;
                     powerUpDuration = 10000; // 10 seconds
                     currentLevel = 1;
-                    obstacleSpeed = 5;
+                    obstacleSpeed = 3;
                     powerUpSpeed = 3;
-                    obstacleSpawnChance = 0.01;
+                    obstacleSpawnChance = 0.008;
                     powerUpSpawnChance = 0.04;
                     highScore = 0; // Initialize high score
                     leaderboardData = [];
@@ -696,13 +696,13 @@
                             powerUps.forEach((powerUp, index) =>
                             {
                                 powerUp.x -= powerUpSpeed;
-                                ctx.font = '38px Arial';
+                                ctx.font = '28px Arial';
                                 ctx.fillText(`🪙`, powerUp.x, powerUp.y);
 
                                 // Check for power-up collection
                                 if (
-                                    powerUp.x <= 50 + character.width &&
-                                    powerUp.x + powerUp.width >= 50 &&
+                                    powerUp.x <= 75 + character.width &&
+                                    powerUp.x + powerUp.width >= 75 &&
                                     powerUp.y <= character.y + character.height &&
                                     powerUp.y + powerUp.height >= character.y
                                 )
@@ -721,7 +721,7 @@
                                     tapAnimation.classList.add('tap-animation');
                                     tapAnimation.textContent = '1';
                                     tapAnimation.style.left = powerUp.x + 'px';
-                                    tapAnimation.style.top = powerUp.y + 80 + 'px';
+                                    tapAnimation.style.top = powerUp.y + 0 + 'px';
                                     document.body.appendChild(tapAnimation);
 
                                     setTimeout(() =>
@@ -740,13 +740,13 @@
                             });
 
                             // Add a new obstacle periodically
-                            if (Math.random() < 0.01)
+                            if (Math.random() < obstacleSpawnChance && Math.random() > 0.00008)
                             {
                                 obstacles.push({
                                     x: canvas.width,
                                     y: canvas.height - 50,
                                     width: 10,
-                                    height: Math.floor(Math.random() * (60)) + 20,
+                                    height: 10
                                 });
                             }
 
