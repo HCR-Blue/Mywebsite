@@ -13,9 +13,11 @@
                 justify-content: flex-start;
                 min-height: 80vh;
                 margin: 0;
-                font-family: Arial, sans-serif;
-                background: linear-gradient(45deg, #00ff00, #ff00ff, #0000ff, #ff00ff);
-                background-size: 100% 400%;
+                font-family: OCR-A BT, sans-serif;
+                background: linear-gradient(365deg, #b15500, #b15500, #d05800, #bfcfff, #0000a5, #00f);
+                background-size: auto;
+                background-size: 100% 168%;
+                user-select: none;
                 /*            animation: colorChange 10s ease infinite;*/
             }
 
@@ -34,48 +36,35 @@
             }
 
             .aflogo {
-              display: block;
-              margin: 0 auto;
-              width: 270px;
-              height: auto;
-              -webkit-user-select: none;
-              -moz-user-select: none;
-              -ms-user-select: none;
-              user-select: none;
-              pointer-events: auto;
-              -webkit-tap-highlight-color: transparent;
-              transition: transform 0.3s ease-in-out;
+                display: block;
+                margin: 0 auto;
+                width: 270px;
+                height: auto;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                pointer-events: auto;
+                -webkit-tap-highlight-color: transparent;
             }
 
             .aflogo:active {
-              transform: scale(0.95) rotate(-10deg);
-              object-fit: contain;
-              animation: pulse 0.5s ease-in-out;
+                transform: scale(0.95);
+                object-fit: contain;
             }
 
             .aflogo:focus {
-              outline: none;
-            }
-
-            @keyframes pulse {
-              0% {
-                transform: scale(0.95) rotate(-10deg);
-              }
-              50% {
-                transform: scale(1.1) rotate(10deg);
-              }
-              100% {
-                transform: scale(0.95) rotate(-10deg);
-              }
+                outline: none;
             }
 
             #tap-count {
                 font-size: 25px;
                 font-weight: bold;
+                margin: 0;
             }
 
             button {
-                font-family: Arial;
+                font-family: Exotc350 Bd BT;
                 margin: 0 10px;
                 padding: 10px 20px;
                 font-size: 18px;
@@ -92,13 +81,13 @@
             }
 
             .screen {
-                position: absolute;
+                /* position: absolute;
                 top: 5%;
                 left: 50%;
-                transform: translate(-50%, 0);
+                transform: translate(-50%, 0); */
                 text-align: center;
-                padding: 20px;
-                width: 80%;
+                padding-top: 20px;
+                width: 100%;
                 max-width: 600px;
                 display: none;
             }
@@ -144,7 +133,7 @@
                 padding: 8px 12px;
                 font-size: 16px;
                 border: 1px solid #ccc;
-                border-radius: 10px;
+                border-radius: 4px;
                 width: 250px;
                 margin-right: 10px;
             }
@@ -155,7 +144,7 @@
                 background-color: #500000;
                 color: #D8B625;
                 border: none;
-                border-radius: 10px;
+                border-radius: 4px;
                 cursor: pointer;
             }
 
@@ -165,8 +154,8 @@
 
             .tasks {
                 position: absolute;
-                bottom: 20%;
-                left: 5%;
+                top: 20%;
+                right: 5%;
                 display: flex;
                 flex-direction: column;
             }
@@ -211,7 +200,7 @@
                 display: flex;
                 justify-content: space-between;
                 /* border: 1px solid #fff; */
-                border-radius: 20px; 
+                /* border-radius: 10px; */
                 background: #0000006a;
                 color: #ffcc00;
                 align-items: baseline;
@@ -241,12 +230,12 @@
 
             .wallet-icon {
                 font-size: 50px;
-/*                 background: #ffffff1a; */
+                background: #ffffff1a;
                 text-align: center;
             }
 
             .wallet-icon:hover {
-/*                 background-color: #ffffff82; */
+                background-color: #ffffff82;
             }
 
             /* anime */
@@ -301,30 +290,17 @@
                 }
             }
 
-            .tap-cursor:active {
+            /* .tap-cursor:active {
                 animation: tap-animation 0.2s ease -in -out;
+            } */
+
+            #game-canvas {
+                border: none;
+                /* background: linear-gradient(365deg, #b1550000, #1600b1, #d0580000, #bfcfff00, #0000a500, #00f0); */
+                height: 60vh;
+                width: 100vw;
+                background-color: bisque;
             }
-
-
-/*            button {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              padding: 10px 20px;
-              font-size: 16px;
-              border-radius: 5px;
-              border: none;
-              cursor: pointer;
-              outline: none;
-              background-color: #985;
-              color: #fff;
-            }
-
-            button img {
-              width: 16px;
-              height: 16px;
-              margin-right: 8px;
-            }*/
         </style>
     </head>
 
@@ -334,11 +310,10 @@
         <div id="screen1" class="screen active">
             <h2 style="color: rgb(255, 255, 255); font-size:37px; font-weight: bold;" id="tap-count">0.000</h2>
             <h2 id="ligues" style="color: rgb(255, 199, 45)"> <code> <</code> Gold <code>></code> </h2>
-            <img src="resources/aflogo.png" alt="AF Logo" class="aflogo" oncontextmenu="return false;" onmousedown="return false;"
-                oncopy="return false;" oncut="return false;" onpaste="return false;" onselectstart="return false;"
-                ondragstart="return false;" onclick="vibrate()" onclick="handleClaimSubmission()">
-
-            <!-- <p style="color:#fff">COMMING SOON...</p> -->
+            <div id="play_page">
+                <button id="play-btn">play</button>
+            </div>
+            <canvas id="game-canvas" width="400" height="600"></canvas>
         </div>
 
         <div id="screen2" class="screen">
@@ -378,20 +353,23 @@
 
             <address>idfknsdafjkddfj-980999</address>
             <div style="font-size:200px;">
-                ⚡
+                🧭
             </div>
         </div>
 
         <div class="button-container">
             <button id="button2" style="outline: none;">Friends 👥</button>
-            <button id="button1" style="outline: none;">Mining ⛏️</button>
+            <button id="button1" style="outline: none;">Mine ⛏️</button>
             <button id="button3" style="outline: none;">Boost 🚀</button>
         </div>
 
         <div id="ligues-screen" class="screen">
             <p style="font-size:40px; font-weight:bold; color: #fff;">Gold League</p>
             <p style="font-size: 18px; color:#ffd61e; font-weight:bold;  ">You owned this cup</p>
-            <p style="height: 200px; font-size:144px; margin: 5px; color:rgb(255, 208, 0); font-weight:bold;">💫</p>
+            <div id="leaderboardData">
+                <h3>Leaderboard</h3>
+                <ol id="leaderboard-list"></ol>
+            </div>
             <div style="display: flex; flex-direction: column;">
                 <div class="ligue-range">
                     <!-- <p>😑</p> -->
@@ -426,148 +404,21 @@
 
         </div>
         <div id="wallet-screen" class="screen">
-            <h2>Connect to your TON wallet</h2>
-            <button id="conn-wallet-btn">
-              <img src="resources/ton_symbol.svg" alt="Wallet Icon" style="width: 25px; height: 25px;">
-              CONNECT
-            </button>
+            <h2 style="color: #fff;">COMMING SOON...</h2>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/@tonclient/lib-web/dist/ton-client-wasm.js"></script>
 
         <div id="tasks" class="tasks">
             <span class="prize">🎁</span>
         </div>
         <div id="wallet" class="wallet">
-            <span class="wallet-icon">👛</span>
+            <span class="wallet-icon">💼</span>
             <p class="wallet_text"
-                style="text-align:center; font-size:10px;  margin: 0px; padding: 0px 2px 0 2px;">
+                style="text-align:center; font-size:10px;  background-color: #ffffff71;  margin: 0px; padding: 0px 2px 0 2px;">
                 Connect
                 Wallet</p>
         </div>
 
         <script>
-            // Initialize the TON SDK
-            (async () => {
-              await window.TONClient.setup({
-                network: {
-                  endpoints: ['https://toncenter.com/api/v2/jsonRPC'],
-                },
-              });
-            })();
-
-            const connWalletBtn = document.getElementById('conn-wallet-btn');
-
-            // Handle wallet connection
-            connWalletBtn.addEventListener('click', async () => {
-              try {
-                // Request wallet accounts
-                const { accounts } = await window.TONClient.requestAccounts();
-
-                // Display the connected wallet address
-                alert(`Connected wallet address: ${accounts[0]}`);
-              } catch (error) {
-                console.error('Error connecting to wallet:', error);
-                alert(`Error connecting to wallet: ${error.message}`);
-              }
-            });
-            // Connect to ton wallet =======================
-
-
-            function vibrate()
-            {
-                if (navigator.vibrate)
-                {
-                    // Vibrate for 100 milliseconds
-                    navigator.vibrate(1);
-                }
-            }
-
-            function shareTelegramBotLink()
-            {
-                const botLink = 'https://t.me/Aftribe_bot';
-
-                // Check if the user has a sharing option available
-                if (navigator.share)
-                {
-                    navigator.share({
-                        text: 'Check out AfTribeBot!',
-                        url: botLink
-                    })
-                        .then(() =>
-                        {
-                            console.log('Link shared successfully!');
-                        })
-                        .catch((error) =>
-                        {
-                            console.error('Error sharing link:', error);
-                            // Fallback to copying the link to the clipboard
-                            navigator.clipboard.writeText(botLink)
-                                .then(() =>
-                                {
-                                    alert('Telegram bot link copied to clipboard!');
-                                })
-                                .catch((error) =>
-                                {
-                                    console.error('Error copying link:', error);
-                                });
-                        });
-                } else
-                {
-                    // Fallback to copying the link to the clipboard
-                    navigator.clipboard.writeText(botLink)
-                        .then(() =>
-                        {
-                            alert('Telegram bot link copied to clipboard!');
-                        })
-                        .catch((error) =>
-                        {
-                            console.error('Error copying link:', error);
-                        });
-                }
-            }
-
-            document.getElementById('copy-link-btn').addEventListener('click', shareTelegramBotLink);
-
-
-            // document.getElementById('open-app-btn').addEventListener('click', () => {
-            //     // Code to communicate with Telegram bot and open the "Web App"
-            // });
-            // let tapCount = 0;
-            const tapCountDisplay = document.getElementById('tap-count');
-
-            let tapCount = 0.000;
-            document.querySelector('.aflogo').addEventListener('click', () =>
-            {
-                // Simulate updating the tap count
-                // let tapCount = parseInt(tapCountDisplay.textContent);
-                // tapCountDisplay.textContent = (++tapCount).toString();
-                let zeropoint = parseFloat(0.001);
-                let result = tapCount += zeropoint;
-
-                tapCountDisplay.textContent = result.toFixed(3);
-
-
-                tapCountDisplay.classList.add('animate');
-                setTimeout(() =>
-                {
-                    tapCountDisplay.classList.remove('animate');
-                }, 500);
-
-                const tapAnimation = document.createElement('div');
-                tapAnimation.classList.add('tap-animation');
-                tapAnimation.textContent = '+0.0001';
-                tapAnimation.style.left = event.clientX + 'px';
-                tapAnimation.style.top = event.clientY + 'px';
-                document.body.appendChild(tapAnimation);
-                setTimeout(() =>
-                {
-                    tapAnimation.remove();
-                }, 500);
-
-                // sendTapCountToServer(result);
-            });
-
             const button1 = document.getElementById('button1');
             const button2 = document.getElementById('button2');
             const button3 = document.getElementById('button3');
@@ -576,11 +427,20 @@
             const tasks = document.getElementById('tasks');
             const wallet = document.getElementById('wallet');
 
+            // CANVAS ------------PART
+            const play_page = document.getElementById('play_page')
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            const tapCountDisplay = document.getElementById('tap-count');
+            let zeropoint = parseFloat(0.001);
+            let tapCount = 0.000;
+
             button1.addEventListener('click', () =>
             {
                 showScreen('screen1');
                 tasks.style.display = 'flex';
                 wallet.style.display = 'flex';
+                playCanvas()
             });
 
             button2.addEventListener('click', () =>
@@ -589,8 +449,77 @@
                 tasks.style.display = 'none';
                 wallet.style.display = 'none';
                 document.getElementById('screen2-text').textContent = 'Join our channel';
-            });
+                function shareTelegramBotLink()
+                {
+                    const botLink = 'https://t.me/Aftribe_bot';
 
+                    // Check if the user has a sharing option available
+                    if (navigator.share)
+                    {
+                        navigator.share({
+                            text: 'Check out AfTribeBot!',
+                            url: botLink
+                        })
+                            .then(() =>
+                            {
+                                console.log('Link shared successfully!');
+                            })
+                            .catch((error) =>
+                            {
+                                console.error('Error sharing link:', error);
+                                // Fallback to copying the link to the clipboard
+                                navigator.clipboard.writeText(botLink)
+                                    .then(() =>
+                                    {
+                                        alert('Telegram bot link copied to clipboard!');
+                                    })
+                                    .catch((error) =>
+                                    {
+                                        console.error('Error copying link:', error);
+                                    });
+                            });
+                    } else
+                    {
+                        // Fallback to copying the link to the clipboard
+                        navigator.clipboard.writeText(botLink)
+                            .then(() =>
+                            {
+                                alert('Telegram bot link copied to clipboard!');
+                            })
+                            .catch((error) =>
+                            {
+                                console.error('Error copying link:', error);
+                            });
+                    }
+                }
+
+                let copyLinkBtn = document.getElementById('copy-link-btn').addEventListener('click', shareTelegramBotLink);
+
+
+                function JoinUs(screenId)
+                {
+                    window.open('https://t.me/aftribe', '_blank');
+                }
+
+                document.getElementById('screen2-text').addEventListener('click', JoinUs);
+                // Get the input field and the copy button
+                const inviteLinkInput = document.getElementById('invite-link-input');
+
+                // Add a click event listener to the copy button
+                copyLinkBtn.addEventListener('click', () =>
+                {
+                    // Select the text in the input field
+                    inviteLinkInput.select();
+                    inviteLinkInput.setSelectionRange(0, 99999); // For mobile devices
+
+                    // Copy the selected text to the clipboard
+                    navigator.clipboard.writeText(inviteLinkInput.value);
+
+                    // Show a success message or perform any other desired action
+                    alert('Invite link copied to clipboard!');
+                });
+
+            });
             button3.addEventListener('click', () =>
             {
                 showScreen('screen3');
@@ -598,7 +527,6 @@
                 wallet.style.display = 'none';
                 document.getElementById('screen3-text').textContent = 'x2';
             });
-
             ligues.addEventListener('click', () =>
             {
                 showScreen('ligues-screen')
@@ -625,60 +553,265 @@
                 document.getElementById(screenId).classList.add('active');
             }
 
-            function JoinUs(screenId)
+
+            function playCanvas(params)
             {
-                window.open('https://t.me/aftribe', '_blank');
-            }
+                // Game variables
+                let character = {
+                    x: 50,
+                    y: canvas.height - 50,
+                    width: 30,
+                    height: 20,
+                    velocity: 0,
+                    gravity: 1,
+                    jumpForce: -15
+                };
 
-            document.getElementById('screen2-text').addEventListener('click', JoinUs);
-            // Get the input field and the copy button
-            const inviteLinkInput = document.getElementById('invite-link-input');
+                let obstacles = [];
+                let powerUps = [];
+                let score = 0;
+                let gameOver = false;
+                let isJumping = false;
+                let jumpHeight = 250;
+                let jumpDuration = 0.8;
+                let jumpStartTime = 0;
+                let powerUpDuration = 10000; // 10 seconds
+                let currentLevel = 0.2;
+                let obstacleSpeed = 3;
+                let powerUpSpeed = 3;
+                let obstacleSpawnChance = 0.008;
+                let powerUpSpawnChance = 0.04;
+                let highScore = 0; // Initialize high score
+                let leaderboardData = [];
 
-            // Add a click event listener to the copy button
-            copyLinkBtn.addEventListener('click', () =>
-            {
-                // Select the text in the input field
-                inviteLinkInput.select();
-                inviteLinkInput.setSelectionRange(0, 99999); // For mobile devices
+                canvas.style.display = 'none';
+                const playBtn = document.getElementById('play-btn');
 
-                // Copy the selected text to the clipboard
-                navigator.clipboard.writeText(inviteLinkInput.value);
+                console.log(gameOver);
+                playBtn.addEventListener('click', () =>
+                {
+                    play_page.style.display = 'none';
+                    canvas.style.display = 'block';
+                    character.x = 50;
+                    character.y = canvas.height - 50;
+                    character.width = 20;
+                    character.height = 50;
+                    character.velocity = 0;
+                    character.gravity = 1;
+                    character.jumpForce = -15;
+                    obstacles = [];
+                    powerUps = [];
+                    score = 0;
+                    gameOver = false;
+                    isJumping = false;
+                    jumpHeight = 250;
+                    jumpDuration = 0.8;
+                    jumpStartTime = 0;
+                    powerUpDuration = 10000; // 10 seconds
+                    currentLevel = 1;
+                    obstacleSpeed = 3;
+                    powerUpSpeed = 3;
+                    obstacleSpawnChance = 0.008;
+                    powerUpSpawnChance = 0.04;
+                    highScore = 0; // Initialize high score
+                    leaderboardData = [];
+                    startGame()
+                })
 
-                // Show a success message or perform any other desired action
-                alert('Invite link copied to clipboard!');
-            });
+
+                function startGame(params)
+                {
+
+                    // Game loop
+                    function gameLoop(timestamp)
+                    {
+                        // Clear the canvas
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        if (!gameOver)
+                        {
+                            // Handle jump
+                            if (isJumping)
+                            {
+                                const elapsedTime = (timestamp - jumpStartTime) / 1000;
+                                if (elapsedTime < jumpDuration)
+                                {
+                                    character.y = canvas.height - 50 - jumpHeight * Math.sin((elapsedTime / jumpDuration) * Math.PI);
+                                } else
+                                {
+                                    isJumping = false;
+                                    character.y = canvas.height - 50;
+                                }
+                            }
 
 
+                            // Draw character
+                            ctx.save();
+                            ctx.font = '58px Arial';
+                            ctx.translate(200, 0);
+                            ctx.scale(-1, 1);
+                            ctx.fillText('🚙', 100, character.y);
+                            ctx.restore();
+
+                            // Move and draw the obstacles
+                            obstacles.forEach((obstacle, index) =>
+                            {
+                                obstacle.x -= obstacleSpeed;
+                                ctx.save();
+                                ctx.font = '50px Arial';
+                                ctx.fillText(`🔥`, obstacle.x, obstacle.y);
+                                ctx.restore();
+
+                                // Check for collision
+                                if (
+                                    obstacle.x <= 50 + character.width &&
+                                    obstacle.x + obstacle.width >= 50 &&
+                                    obstacle.y <= character.y + character.height &&
+                                    obstacle.y + obstacle.height >= character.y
+                                )
+                                {
+                                    gameOver = true;
+                                    gameOvered()
+                                }
+
+                                // Remove obstacle if it goes off-screen
+                                if (obstacle.x + obstacle.width < 0)
+                                {
+                                    obstacles.splice(index, 1);
+                                    score++;
+
+                                    // Increase difficulty when a certain score threshold is reached
+                                    if (score % 10 === 0)
+                                    {
+                                        currentLevel++;
+                                        obstacleSpeed += 1;
+                                        powerUpSpeed += 0.5;
+                                        obstacleSpawnChance += 0.01;
+                                        powerUpSpawnChance += 0.06;
+                                    }
+                                }
+                            });
+
+                            // Move and draw the power-ups
+                            powerUps.forEach((powerUp, index) =>
+                            {
+                                powerUp.x -= powerUpSpeed;
+                                ctx.font = '28px Arial';
+                                ctx.fillText(`🪙`, powerUp.x, powerUp.y);
+
+                                // Check for power-up collection
+                                if (
+                                    powerUp.x <= 75 + character.width &&
+                                    powerUp.x + powerUp.width >= 75 &&
+                                    powerUp.y <= character.y + character.height &&
+                                    powerUp.y + powerUp.height >= character.y
+                                )
+                                {
+                                    powerUps.splice(index, 1);
+                                    let result = tapCount += zeropoint;
+                                    tapCountDisplay.textContent = result.toFixed(3);
+                                    tapCountDisplay.classList.add('animate');
+
+                                    setTimeout(() =>
+                                    {
+                                        tapCountDisplay.classList.remove('animate');
+                                    }, 500);
+
+                                    const tapAnimation = document.createElement('div');
+                                    tapAnimation.classList.add('tap-animation');
+                                    tapAnimation.textContent = '1';
+                                    tapAnimation.style.left = powerUp.x + 'px';
+                                    tapAnimation.style.top = powerUp.y + 0 + 'px';
+                                    document.body.appendChild(tapAnimation);
+
+                                    setTimeout(() =>
+                                    {
+                                        tapAnimation.remove();
+                                    }, 500);
+
+                                    // sendTapCountToServer(result);
+                                }
+
+                                // Remove power-up if it goes off-screen
+                                if (powerUp.x + powerUp.width < 0)
+                                {
+                                    powerUps.splice(index, 1);
+                                }
+                            });
+
+                            // Add a new obstacle periodically
+                            if (Math.random() < obstacleSpawnChance && Math.random() > 0.00008)
+                            {
+                                obstacles.push({
+                                    x: canvas.width,
+                                    y: canvas.height - 50,
+                                    width: 10,
+                                    height: 10
+                                });
+                            }
+
+                            // Add a new power-up periodically
+                            if (Math.random() < powerUpSpawnChance)
+                            {
+                                powerUps.push({
+                                    x: canvas.width,
+                                    y: 550,
+                                    width: 25,
+                                    height: 25,
+                                });
+                            }
+
+                            requestAnimationFrame(gameLoop);
+                        } else
+                        {
+                            gameOver = true;
+                            gameOvered();
+                        }
+                        ctx.font = '24px Arial';
+                        ctx.fillText(`Level: ${ currentLevel }`, 10, 60);
+
+                        // Game over
+                        function gameOvered()
+                        {
+                            console.log(gameOver, 'ggggggggg');
+                            ctx.font = '48px Arial';
+                            ctx.fillText(`${ score }🔥`, canvas.width / 2 - 12, canvas.height / 2);
+                            setTimeout(() =>
+                            {
+                                // canvas.style.display = 'none';
+                                play_page.style.display = 'block';
+                                playCanvas()
+                            }, 5000)
+                        }
 
 
+                        // Handle jump input
+                        canvas.addEventListener('click', (event) =>
+                        {
+                            if (!isJumping)
+                            {
+                                isJumping = true;
+                                jumpStartTime = performance.now();
+                            }
+                        });
 
+                    }
 
+                    // Load SVG icons
+                    const characterIcon = new Image();
+                    characterIcon.src = 'aflogo.png'
+                    // characterIcon.src = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-13.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm3 10c3.31 0 6-2.69 6-6 0-.79-.15-1.56-.44-2.22l-2.76 2.76c.03.18.05.37.05.57 0 1.66-1.34 3-3 3s-3-1.34-3-3c0-.2.02-.39.05-.57l-2.76-2.76c-.29.66-.44 1.43-.44 2.22 0 3.31 2.69 6 6 6z'/%3E%3C/svg%3E";
 
-            // ==============================================
-            async function handleClaimSubmission() {
-              try {
-                const response = await fetch('http://localhost:5000/handle_claim', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({ claim: 'New Claim' })
-                });
+                    const obstacleIcon = new Image();
+                    obstacleIcon.src = 'aflogo.png';
+                    // obstacleIcon.src = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14.5V7c0-.41-.34-.75-.75-.75s-.75.34-.75.75v10.5c0 .41.34.75.75.75s.75-.34.75-.75z'/%3E%3C/svg%3E";
 
-                if (response.ok) {
-                  const data = await response.json();
-                  console.log('Response from Python server:', data);
-                  // You can update the DOM or perform any other actions with the response data
-                  document.getElementById('result').textContent = data.message;
-                } else {
-                  console.error('Error:', response.status);
-                  document.getElementById('result').textContent = 'Error submitting the claim.';
+                    // Start the game
+                    gameLoop(performance.now());
+
                 }
-              } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('result').textContent = 'An error occurred. Please try again later.';
-              }
             }
+            playCanvas();
         </script>
     </body>
 
